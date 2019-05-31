@@ -1,0 +1,90 @@
+﻿@model IEnumerable<Invent.Web.Data.Entities.Supplier>
+
+@{
+    ViewData["Title"] = "Index";
+    var context = @Context.Request.Path + @Context.Request.QueryString;
+}
+
+<br /><br />
+<h1 style="text-align:center">Suppliers</h1>
+<br /><br />
+<p>
+    <a class="btn btn-primary btn-block" asp-action="Create" asp-route-returnUrl=@context>Create New</a>
+</p>
+
+<div class="container" id="box">
+    <div class="table-responsive">
+        <div class="table-wrapper-scroll-y my-custom-scrollbar">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Name)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Town)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Country)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Phone)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Email)
+                        </th>
+                        <th>
+                            @Html.DisplayNameFor(model => model.Website)
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Town)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Country)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Phone)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Email)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Website)
+                            </td>
+                            <td><i class="far fa-trash-alt"></i></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<style>
+    #box {
+        border: 1px solid #007BFF;
+        margin-top: 3%;
+        padding: 2%;
+        background-color: azure;
+    }
+
+    .my-custom-scrollbar {
+        position: relative;
+        height: 350px;
+        overflow: auto;
+    }
+
+    .table-wrapper-scroll-y {
+        display: block;
+    }
+</style>

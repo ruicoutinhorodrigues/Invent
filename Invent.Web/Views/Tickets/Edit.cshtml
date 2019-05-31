@@ -1,0 +1,113 @@
+﻿@model Invent.Web.Data.Entities.Ticket
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+@*<h1>Edit</h1>*@
+
+
+<div class="modal" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Ticket</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-10 offset-1">
+                            <form asp-action="Edit">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <input type="hidden" asp-for="Id" />
+                                <input type="hidden" asp-for="GuyName" />
+                                <input type="hidden" asp-for="GuyContact" />
+                                <input type="hidden" asp-for="ProdReferenceCode" />
+                                <input type="hidden" asp-for="Trouble" />
+                                <input type="hidden" asp-for="OpenDate" />
+                                <input type="hidden" asp-for="CloseDate" />
+                                <input type="hidden" asp-for="InventoryId" />
+
+                                <div class="form-group">
+
+                                    <div class="control-label" style="margin-bottom: 0.5rem;">
+                                        @Html.DisplayNameFor(model => model.OpenDate)
+                                    </div>
+                                    <div class="form-control">
+                                        @Html.DisplayFor(model => model.OpenDate)
+                                    </div>
+                                </div>
+                              
+                                <div class="form-group">
+                                    <div class="control-label" style="margin-bottom: 0.5rem;">
+                                        @Html.DisplayNameFor(model => model.ProdReferenceCode)
+                                    </div>
+                                    <div class="form-control">
+                                        @Html.DisplayFor(model => model.ProdReferenceCode)
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="control-label" style="margin-bottom: 0.5rem;">
+                                        Name
+                                    </div>
+                                    <div class="form-control">
+                                        @Html.DisplayFor(model => model.GuyName)
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="control-label" style="margin-bottom: 0.5rem;">
+                                        @Html.DisplayNameFor(model => model.Trouble)
+                                    </div>
+                                    <div class="form-control" style="height: 120px;">
+                                        @Html.DisplayTextFor(model => model.Trouble)
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label asp-for="Remedy" class="control-label"></label>
+                                    <textarea asp-for="Remedy" class="form-control" style="min-height: 120px;"></textarea>
+                                    <span asp-validation-for="Remedy" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <div class="form-check">
+                                        <input asp-for="ClosedIssue" type="checkbox" class="form-check-input" />
+                                        <label asp-for="ClosedIssue" class="form-check-label"></label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <input type="submit" value="Save" class="btn btn-primary btn-block" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+
+@section Scripts {
+
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+
+    $("#myModal").modal('show');
+
+    $('#myModal').on('hidden.bs.modal', function (e) {
+        document.location.href = "/Tickets?inventoryId=@Model.InventoryId";
+    })
+    </script>
+}

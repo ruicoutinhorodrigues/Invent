@@ -1,8 +1,96 @@
-﻿@{
+﻿@model Invent.Web.Areas.Identity.Pages.Account.RegisterModel
+@{
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="limiter">
+    <div class="container-login100">
+        <div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-50">
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <img src="~/images/ams.png" />
+                    </div>
+                    <div class="flip-card-back">
+                        <a asp-area="Identity" asp-page="/Account/Login" style="font-size: 1.2em;">
+                            <i class="fas fa-motorcycle fa-2x" style="margin-top: 5%"></i>
+                            <br />
+                            Login
+                        </a>
+                        <br />
+                        <br />
+                        <a asp-area="" asp-controller="Tickets" asp-action="Create" style="font-size: 1.2em;">
+                            <i class="fas fa-address-card fa-2x" style="margin-top: 5%;"></i>
+                            <br />
+                            Report
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+
+@*<h1 class="display-4">Welcome</h1>
+    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>*@
+
+
+
+
+
+<style>
+    body {
+        background-color: #E9FAFF;
+    }
+
+    header {
+        visibility: hidden;
+    }
+
+    footer {
+        visibility: hidden;
+    }
+
+    img {
+        height: auto;
+        width: 100%;
+    }
+
+
+    .flip-card {
+        text-align: center;
+        background-color: transparent;
+        height: 250px;
+        /*border: 1px solid #f1f1f1;*/
+        perspective: 1000px;
+    }
+
+    .flip-card-inner {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        text-align: center;
+        transition: transform 0.8s;
+        transform-style: preserve-3d;
+    }
+
+    .flip-card:hover .flip-card-inner {
+        transform: rotateY(180deg);
+    }
+
+    /* Position the front and back side */
+    .flip-card-front, .flip-card-back {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+    }
+
+
+    /* Style the back side */
+    .flip-card-back {
+        /*background-color: #fff;*/
+        color: black;
+        transform: rotateY(180deg);
+    }
+</style>

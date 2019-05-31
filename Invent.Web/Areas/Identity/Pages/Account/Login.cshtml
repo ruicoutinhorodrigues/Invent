@@ -1,0 +1,183 @@
+﻿@page
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<IdentityUser> SignInManager
+@inject UserManager<IdentityUser> UserManager
+
+
+@model LoginModel
+
+
+
+
+<div class="limiter">
+    <div class="container-login100">
+        <div class="wrap-login100 p-l-55 p-r-55 p-t-65 p-b-50">
+            <form class="login100-form" id="account" method="post">
+
+                <span class="login100-form-title p-b-33">
+                    Login
+                </span>
+
+                <div class="wrap-input100">
+                    <input asp-for="Input.Email" class="input100" placeholder="Email" />
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    <span class="focus-input100-1"></span>
+                    <span class="focus-input100-2"></span>
+                </div>
+
+                <div class="wrap-input100">
+                    <input asp-for="Input.Password" class="input100" placeholder="Password" />
+                    <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    <span class="focus-input100-1"></span>
+                    <span class="focus-input100-2"></span>
+                </div>
+
+                <div class="container-login100-form-btn m-t-20">
+                    <button type="submit" class="login100-form-btn">Log in</button>
+                </div>
+
+                <div class="text-center p-t-45 p-b-4">
+                    <span class="txt1">
+                        Forgot
+                    </span>
+
+                    <a class="txt2 hov1" id="forgot-password" asp-page="./ForgotPassword">password?</a>
+                </div>
+            </form>
+
+            <div class="text-center p-t-45 p-b-4">
+
+                <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                    <div class="login100-form-social flex-c-m">
+                        <button type="submit" class="login100-form-social-item flex-c-m bg1 m-r-5" name="provider" value="Facebook">
+                            <i class="fab fa-facebook-square fa-3x" aria-hidden="true"></i>
+                        </button>
+
+
+                        <button type="submit" class="login100-form-social-item flex-c-m bg2 m-r-5" name="provider" value="Google">
+                            <i class="fab fa-google-plus-square fa-3x" aria-hidden="true"></i>
+                        </button>
+                    </div>
+                </form>
+
+
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+@*@{
+        ViewData["Title"] = "Log in";
+    }
+
+    <h1>@ViewData["Title"]</h1>*@
+
+
+@*<div class="row">
+        <div class="col-md-4">
+            <section>
+
+
+                <form id="account" method="post">
+                    <h4>Use a local account to log in.</h4>
+                    <hr />
+                    <div asp-validation-summary="All" class="text-danger"></div>
+                    <div class="form-group">
+                        <label asp-for="Input.Email"></label>
+                        <input asp-for="Input.Email" class="form-control" />
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="Input.Password"></label>
+                        <input asp-for="Input.Password" class="form-control" />
+                        <span asp-validation-for="Input.Password" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <div class="checkbox">
+                            <label asp-for="Input.RememberMe">
+                                <input asp-for="Input.RememberMe" />
+                                @Html.DisplayNameFor(m => m.Input.RememberMe)
+                            </label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary">Log in</button>
+                    </div>
+                    <div class="form-group">
+                        <p>
+                            <a id="forgot-password" asp-page="./ForgotPassword">Forgot your password?</a>
+                        </p>
+                        <p>
+                            <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl">Register as a new user</a>
+                        </p>
+                    </div>
+                </form>
+
+
+            </section>
+        </div>
+        <div class="col-md-6 col-md-offset-2">
+            <section>
+                <h4>Use another service to log in.</h4>
+                <hr />
+                @{
+                    if ((Model.ExternalLogins?.Count ?? 0) == 0)
+                    {
+                        <div>
+                            <p>
+                                There are no external authentication services configured. See <a href="https://go.microsoft.com/fwlink/?LinkID=532715">this article</a>
+                                for details on setting up this ASP.NET application to support logging in via external services.
+                            </p>
+                        </div>
+                    }
+                    else
+                    {
+                        <form id="external-account" asp-page="./ExternalLogin" asp-route-returnUrl="@Model.ReturnUrl" method="post" class="form-horizontal">
+                            <div>
+                                <p>
+                                    @foreach (var provider in Model.ExternalLogins)
+                                    {
+                                        <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                                    }
+                                </p>
+                            </div>
+                        </form>
+                    }
+                }
+            </section>
+        </div>
+    </div>*@
+
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+<style>
+    body {
+        background-color: #E9FAFF;
+    }
+
+    header {
+        visibility: hidden;
+    }
+
+    footer {
+        visibility: hidden;
+    }
+</style>

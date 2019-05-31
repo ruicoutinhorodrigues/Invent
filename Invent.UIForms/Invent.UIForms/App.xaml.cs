@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Invent.UIForms.ViewModels;
+using Invent.UIForms.Views;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace Invent.UIForms
 {
@@ -10,7 +10,9 @@ namespace Invent.UIForms
         {
             InitializeComponent();
 
-            MainPage = new MainPage();
+            MainViewModel.GetInstance().Login = new LoginViewModel();
+
+            MainPage = new NavigationPage(new LoginPage());
         }
 
         protected override void OnStart()

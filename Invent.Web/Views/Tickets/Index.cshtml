@@ -1,0 +1,71 @@
+﻿@model IEnumerable<Invent.Web.Data.Entities.Ticket>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1 style="text-align:center; color: #E9FAFF; background-color: #0092CB; padding: 1%;">Ticket reports</h1>
+
+<br /><br />
+
+<table class="table table-striped dt-responsive nowrap" style="width:100%; text-align: center;">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.GuyName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProdReferenceCode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OpenDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CloseDate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ClosedIssue)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.GuyName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProdReferenceCode)
+                </td>
+
+                <td>
+                    @Html.DisplayFor(modelItem => item.OpenDate)
+                </td>
+                <td>
+                    @if (item.ClosedIssue == false)
+                    {
+                        @Html.Display("----");
+                    }
+                    else
+                    {
+                        @Html.DisplayFor(modelItem => item.CloseDate)
+                    }
+
+                </td>
+                <td>
+                    @Html.CheckBoxFor(modelItem => item.ClosedIssue, new { @disabled = true })
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id"><i class="far fa-edit"></i></a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<br />
+<div class="form-group">
+    <a asp-action="Index" asp-controller="Products" asp-route-inventoryId=@Model.First().InventoryId class="btn btn-info btn-block">Back to Products</a>
+</div>

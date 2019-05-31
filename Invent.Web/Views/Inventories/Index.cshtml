@@ -1,0 +1,104 @@
+﻿@model IEnumerable<Invent.Web.Data.Entities.Inventory>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="text-center">
+    <h1 style="color: #E9FAFF; background-color: #0092CB; padding: 1%;">Available inventories</h1>
+</div>
+
+<br /><br />
+
+@*<p>
+    <a asp-action="Create" class="btn btn-primary" style="padding: 5%;">Create new inventory</a>
+</p>*@
+
+@*<table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DateOfCreation)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.UserName)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.DateOfCreation)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.UserName)
+                </td>
+                <td>
+                    <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                    <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>*@
+
+
+
+<div class="card-columns">
+
+
+    @foreach (var item in Model)
+    {
+
+        <div class="card" style="padding: 2%; border: 1px solid #0094ff; text-align: center;">
+
+            @*<img class="card-img-top" src="~/images/porto_store.jpg" alt="Card image cap" style="min-height: 100px;">*@
+            @if (!string.IsNullOrEmpty(item.ImageUrl))
+            {
+                <img src="@Url.Content(item.ImageUrl)" alt="Card image cap" style="width: 100%; height:250px;" />
+            }
+            else
+            {
+                <img src="~/images/no-image.png" alt="Card image cap" style="width: 70%; height:250px;" />
+            }
+        <div class="card-body text-center">
+            <h4 class="card-title">@Html.DisplayFor(modelItem => item.Name)</h4>
+
+            <p class="card-text"> @Html.DisplayFor(modelItem => item.DateOfCreation)</p>
+
+            <p class="card-text">@Html.DisplayFor(modelItem => item.UserName)</p>
+            <br />
+            <a asp-action="Index" asp-controller="Products" asp-route-inventoryId="@item.Id" class="btn btn-success">Go to inventory</a>
+            <br /><br />
+            @if (User.IsInRole("Admin"))
+            {
+                <a asp-action="Edit" asp-route-id="@item.Id" class="float-left"><i class="fas fa-edit"></i></a>
+                <a asp-action="Delete" asp-route-id="@item.Id" class="float-right"><i class="far fa-trash-alt"></i></a>
+            }
+
+        </div>
+
+        </div>
+
+
+    }
+
+    @if (User.IsInRole("Admin"))
+    {
+        <div class="card" style="border: hidden;">
+            <a asp-action="Create" class="btn btn-primary" style="padding: 5%;">Create new inventory</a>
+        </div>
+    }
+    
+</div>
+
+

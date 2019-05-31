@@ -1,0 +1,217 @@
+﻿@model Invent.Web.Models.ProductViewModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Product</h4>
+<hr />
+
+@*<div class="row">
+        <div class="col-md-4">
+            <form asp-action="Edit" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="ImageUrl" />
+                <div class="form-group">
+                    <label asp-for="ReferenceCode" class="control-label"></label>
+                    <input asp-for="ReferenceCode" class="form-control" readonly/>
+                    <span asp-validation-for="ReferenceCode" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label"></label>
+                    <input asp-for="Description" class="form-control" />
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Value" class="control-label"></label>
+                    <input asp-for="Value" class="form-control" />
+                    <span asp-validation-for="Value" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ImageFile" class="control-label"></label>
+                    <input asp-for="ImageFile" class="form-control" type="file" />
+                    <span asp-validation-for="ImageFile" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="EntryDate" class="control-label"></label>
+                    <input asp-for="EntryDate" class="form-control" readonly />
+                    <span asp-validation-for="EntryDate" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="LastChangeDate" class="control-label"></label>
+                    <input asp-for="LastChangeDate" class="form-control" readonly />
+                    <span asp-validation-for="LastChangeDate" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="InventoryId" class="control-label"></label>
+                    <select asp-for="InventoryId" class="form-control" asp-items="ViewBag.InventoryId"></select>
+                    <span asp-validation-for="InventoryId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="LocationId" class="control-label"></label>
+                    <select asp-for="LocationId" class="form-control" asp-items="ViewBag.LocationId"></select>
+                    <span asp-validation-for="LocationId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="StatusId" class="control-label"></label>
+                    <select asp-for="StatusId" class="form-control" asp-items="ViewBag.StatusId"></select>
+                    <span asp-validation-for="StatusId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CategoryId" class="control-label"></label>
+                    <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId"></select>
+                    <span asp-validation-for="CategoryId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ProductModelId" class="control-label"></label>
+                    <select asp-for="ProductModelId" class="form-control" asp-items="ViewBag.ProductModelId"></select>
+                    <span asp-validation-for="ProductModelId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="SupplierId" class="control-label"></label>
+                    <select asp-for="SupplierId" class="form-control" asp-items="ViewBag.SupplierId"></select>
+                    <span asp-validation-for="SupplierId" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Save" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+        <div class="col-md-4">
+            @if (!string.IsNullOrEmpty(Model.ImageUrl))
+            {
+                <img src="@Url.Content(Model.ImageUrl)" alt="image"  />
+            }
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>*@
+
+<div class="col-md-12">
+
+    <form asp-action="Edit" enctype="multipart/form-data">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="CategoryId" />
+        <input type="hidden" asp-for="ProductModelId" />
+        <input type="hidden" asp-for="SupplierId" />
+        <input type="hidden" asp-for="EntryDate" />
+        <input type="hidden" asp-for="ImageUrl" />
+        <input type="hidden" asp-for="InventoryId" />
+
+        <div class="row row-eq-height">
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="ReferenceCode" class="control-label"></label>
+                    <input asp-for="ReferenceCode" class="form-control text-center" readonly />
+                    <span asp-validation-for="ReferenceCode" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Value" class="control-label"></label>
+                    <input asp-for="Value" class="form-control" asp-is-invariant="true" />
+                    <span asp-validation-for="Value" class="text-danger"></span>
+                </div>
+                <div class="form-group text-center">
+                    @if (!string.IsNullOrEmpty(Model.ImageUrl))
+                    {
+                        <img src="@Url.Content(Model.ImageUrl)" alt="image" style="height: 210px; width: auto; margin-top: 3%; margin-bottom: 3%;" />
+                    }
+                    else
+                    {
+                        <img src="~/images/no-image.png" alt="image" style="height: 210px; width: auto; margin-top: 3%; margin-bottom: 3%;" />
+                    }
+                </div>
+                <div class="form-group">
+                    <label asp-for="ImageFile" class="control-label"></label>
+                    <input asp-for="ImageFile" class="form-control" type="file" />
+                    <span asp-validation-for="ImageFile" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label asp-for="Inventory" class="control-label"></label>
+                    <div class="input-group">
+                        <div class="form-control">
+                            @ViewBag.InventoryName
+                        </div>
+                        @*<select asp-for="InventoryId" class="form-control" asp-items="ViewBag.InventoryId"></select>
+                <a class="btn btn-primary" asp-area="" asp-controller="Inventories" asp-action="Create">New</a>
+                <span asp-validation-for="InventoryId" class="text-danger col-md-12"></span>*@
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label text-center">Details</label>
+                    <div class="input-group">
+                        <div class="form-control">
+                            @ViewBag.ProductModel
+                        </div>
+                        <div class="form-control">
+                            @ViewBag.ProductSize
+                        </div>
+                        <div class="form-control">
+                            @ViewBag.ProductColor
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Location" class="control-label"></label>
+                    <div class="input-group">
+                        <select asp-for="LocationId" class="form-control" asp-items="ViewBag.LocationId"></select>
+                        <a class="btn btn-primary" asp-area="" asp-controller="Locations" asp-action="Create">New</a>
+                        <span asp-validation-for="LocationId" class="text-danger  col-md-12"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Status" class="control-label"></label>
+                    <div class="input-group">
+                        <select asp-for="StatusId" class="form-control" asp-items="ViewBag.StatusId"></select>
+                        <a class="btn btn-primary" asp-area="" asp-controller="Status" asp-action="Create">New</a>
+                        <span asp-validation-for="StatusId" class="text-danger  col-md-12"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label"></label>
+                    <textarea asp-for="Description" class="form-control" style="min-height: 125px;"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="form-group">
+            <input type="submit" value="Update" class="btn btn-success btn-block" />
+            <br />
+            <a asp-action="Index" asp-route-inventoryId="@Model.InventoryId" class="btn btn-info btn-block">Back to List</a>
+        </div>
+    </form>
+
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+
+        $(function () {
+
+            $.validator.methods.range = function (value, element, param) {
+                var globalizedValue = value.replace(",", ".");
+                return this.optional(element) || (globalizedValue >= param[0] && globalizedValue <= param[1]);
+            }
+
+            $.validator.methods.number = function (value, element) {
+                return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:[\s\.,]\d{3})+)(?:[\.,]\d+)?$/.test(value);
+            }
+        });
+
+    </script>
+}

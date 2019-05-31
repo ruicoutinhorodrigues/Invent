@@ -1,0 +1,150 @@
+﻿@model Invent.Web.Data.Entities.Ticket
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+
+    <div class="modal" id="myModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Report equipment changes</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="row">
+                        
+                        <div class="col-md-10 offset-1">
+                            <img src="~/images/ams.png" alt="ams" class="center" style="width: 200px;" />
+                            <br />
+                            <form asp-action="Create">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <div class="form-group">
+                                    <label asp-for="GuyName" class="control-label"></label>
+                                    <input asp-for="GuyName" class="form-control" />
+                                    <span asp-validation-for="GuyName" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="GuyContact" class="control-label"></label>
+                                    <input asp-for="GuyContact" class="form-control" />
+                                    <span asp-validation-for="GuyContact" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="ProdReferenceCode" class="control-label"></label>
+                                    <input asp-for="ProdReferenceCode" class="form-control" />
+                                    <span asp-validation-for="ProdReferenceCode" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Trouble" class="control-label"></label>
+                                    <textarea asp-for="Trouble" class="form-control" style="min-height: 120px;"></textarea>
+                                    <span asp-validation-for="Trouble" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <input type="submit" value="Create" class="btn btn-primary btn-block" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+@*<h1>Create</h1>
+
+<h4>Ticket</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="GuyName" class="control-label"></label>
+                <input asp-for="GuyName" class="form-control" />
+                <span asp-validation-for="GuyName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GuyContact" class="control-label"></label>
+                <input asp-for="GuyContact" class="form-control" />
+                <span asp-validation-for="GuyContact" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProdReferenceCode" class="control-label"></label>
+                <input asp-for="ProdReferenceCode" class="form-control" />
+                <span asp-validation-for="ProdReferenceCode" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Trouble" class="control-label"></label>
+                <textarea asp-for="Trouble" class="form-control" style="min-height: 210px;"></textarea>
+                <span asp-validation-for="Trouble" class="text-danger"></span>
+            </div>*@
+            @*<div class="form-group">
+            <label asp-for="Remedy" class="control-label"></label>
+            <textarea asp-for="Remedy" class="form-control"></textarea>
+            <span asp-validation-for="Remedy" class="text-danger"></span>
+        </div>*@
+            @*<div class="form-group">
+            <label asp-for="OpenDate" class="control-label"></label>
+            <input asp-for="OpenDate" class="form-control" />
+            <span asp-validation-for="OpenDate" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            <label asp-for="CloseDate" class="control-label"></label>
+            <input asp-for="CloseDate" class="form-control" />
+            <span asp-validation-for="CloseDate" class="text-danger"></span>
+        </div>*@
+            @*<div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>*@
+
+@*<div>
+    <a asp-action="Index">Back to List</a>
+</div>*@
+
+<style>
+    .center {
+        display: block;
+        margin-top: 5%;
+        margin-left: auto;
+        margin-right: auto;
+        width: 50%;
+    }
+</style>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+<script type="text/javascript">
+
+    $("#myModal").modal('show');
+
+    $('#myModal').on('hidden.bs.modal', function (e) {
+
+        document.location.href = "/";
+
+    })
+</script>
+}

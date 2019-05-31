@@ -1,0 +1,262 @@
+﻿@model Invent.Web.Models.ProductViewModel
+
+@{
+    ViewData["Title"] = "Create";
+
+    var context = @Context.Request.Path + @Context.Request.QueryString;
+}
+
+<h1>Create</h1>
+
+<h4>Product</h4>
+<hr />
+
+<div class="col-md-12">
+    <form asp-action="Create" enctype="multipart/form-data">
+        <input type="hidden" asp-for="InventoryId" />
+        <div class="row row-eq-height">
+
+            <div class="col-md-6">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="ReferenceCode" class="control-label"></label>
+                    <input asp-for="ReferenceCode" class="form-control text-center" readonly />
+                    <span asp-validation-for="ReferenceCode" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Description" class="control-label"></label>
+                    <textarea asp-for="Description" class="form-control" style="min-height: 210px;"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Value" class="control-label"></label>
+                    <input asp-for="Value" class="form-control" asp-is-invariant="true" />
+                    <span asp-validation-for="Value" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ImageFile" class="control-label"></label>
+                    <input asp-for="ImageFile" class="form-control" type="file" />
+                    <span asp-validation-for="ImageFile" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label asp-for="Size" class="control-label"></label>
+                        <div class="input-group">
+                            <select asp-for="SizeId" class="form-control" asp-items="ViewBag.SizeId">
+                                @*<option>Select size...</option>*@
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label asp-for="Color" class="control-label"></label>
+                        <div class="input-group">
+                            <select asp-for="ColorId" class="form-control" asp-items="ViewBag.ColorId">
+                                @*<option>Select color...</option>*@
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Location" class="control-label"></label>
+                    <div class="input-group">
+                        <select asp-for="LocationId" class="form-control" asp-items="ViewBag.LocationId">
+                            <option>Select location...</option>
+                        </select>
+                        <a class="btn btn-primary" asp-area="" asp-controller="Locations" asp-action="Create" asp-route-inventoryId="@Model.InventoryId" asp-route-returnUrl="@context">New</a>
+                        <span asp-validation-for="LocationId" class="text-danger  col-md-12"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+
+                    <label asp-for="Status" class="control-label"></label>
+                    <div class="input-group">
+                        <select asp-for="StatusId" class="form-control" asp-items="ViewBag.StatusId">
+                            <option>Select status...</option>
+                        </select>
+                        <a class="btn btn-primary" asp-area="" asp-controller="Status" asp-action="Create" asp-route-inventoryId="@Model.InventoryId" asp-route-returnUrl="@context">New</a>
+                        <span asp-validation-for="StatusId" class="text-danger  col-md-12"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Category" class="control-label"></label>
+                    <div class="input-group">
+                        <select asp-for="CategoryId" class="form-control" asp-items="ViewBag.CategoryId">
+                            <option>Select category...</option>
+                        </select>
+                        <a class="btn btn-primary" asp-area="" asp-controller="Categories" asp-action="Create" asp-route-inventoryId="@Model.InventoryId" asp-route-returnUrl="@context">New</a>
+                        <span asp-validation-for="CategoryId" class="text-danger col-md-12"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="ProductModel" class="control-label">Model</label>
+                    <div class="input-group">
+                        <select asp-for="ProductModelId" class="form-control" asp-items="ViewBag.ProductModelId">
+                            <option>Select model...</option>
+                        </select>
+                        <a class="btn btn-primary" asp-area="" asp-controller="ProductModels" asp-action="Create" asp-route-inventoryId="@Model.InventoryId" asp-route-returnUrl="@context">New</a>
+                        <span asp-validation-for="ProductModelId" class="text-danger col-md-12"></span>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Supplier" class="control-label"></label>
+                    <div class="input-group">
+                        <select asp-for="SupplierId" class="form-control" asp-items="ViewBag.SupplierId">
+                            <option>Select supplier...</option>
+                        </select>
+                        <a class="btn btn-primary" asp-area="" asp-controller="Suppliers" asp-action="Create" asp-route-inventoryId="@Model.InventoryId" asp-route-returnUrl="@context">New</a>
+                        <span asp-validation-for="SupplierId" class="text-danger col-md-12"></span>
+                    </div>
+                </div>
+            </div>
+            </div>
+        <br />
+        <div class="form-group">
+            <input type="submit" value="Create" class="btn btn-success btn-block" />
+            <br />
+            <a asp-action="Index" asp-route-inventoryId="@Model.InventoryId" class="btn btn-info btn-block">Back to List</a>
+        </div>
+
+    </form>
+   
+</div>
+
+
+
+
+
+@section Scripts {
+
+    @{ await Html.RenderPartialAsync("_ValidationScriptsPartial"); }
+
+    <script type="text/javascript">
+
+        $(function () {
+
+            $("#Value").val("0");
+
+            $("#CategoryId").change(function () {
+
+                var selectedMod = $("#ProductModelId option:selected").text();
+                var selectedCat = $("#CategoryId option:selected").text();
+                var selectedSup = $("#SupplierId option:selected").text();
+                var selectedSiz = $("#SizeId option:selected").text();
+                var selectedCol = $("#ColorId option:selected").text();
+
+                if (selectedSiz.length == 1) selectedSiz += "X";
+                else if (selectedSiz.length > 2) selectedSiz = "NA";
+
+                if (selectedCol.length > 6) selectedCol = "NTAV";
+
+                $("#ReferenceCode")
+                    .val(selectedCat.slice(0, 2).toUpperCase() +
+                        selectedMod.slice(0, 2).toUpperCase() +
+                        selectedSiz.slice(0, 2).toUpperCase() +
+                        selectedCol.slice(0, 4).toUpperCase() + "$" +
+                        selectedSup.slice(0, 4).toUpperCase() + "#");
+
+            });
+
+            $("#ProductModelId").change(function () {
+                var selectedMod = $("#ProductModelId option:selected").text();
+                var selectedCat = $("#CategoryId option:selected").text();
+                var selectedSup = $("#SupplierId option:selected").text();
+                var selectedSiz = $("#SizeId option:selected").text();
+                var selectedCol = $("#ColorId option:selected").text();
+
+                if (selectedSiz.length == 1) selectedSiz += "X";
+                else if (selectedSiz.length > 2) selectedSiz = "NA";
+
+                if (selectedCol.length > 6) selectedCol = "NTAV";
+
+                $("#ReferenceCode")
+                    .val(selectedCat.slice(0, 2).toUpperCase() +
+                        selectedMod.slice(0, 2).toUpperCase() +
+                        selectedSiz.slice(0, 2).toUpperCase() +
+                        selectedCol.slice(0, 4).toUpperCase() + "$" +
+                        selectedSup.slice(0, 4).toUpperCase() + "#");
+
+            });
+
+            $("#SupplierId").change(function () {
+                var selectedMod = $("#ProductModelId option:selected").text();
+                var selectedCat = $("#CategoryId option:selected").text();
+                var selectedSup = $("#SupplierId option:selected").text();
+                var selectedSiz = $("#SizeId option:selected").text();
+                var selectedCol = $("#ColorId option:selected").text();
+
+                if (selectedSiz.length == 1) selectedSiz += "X";
+                else if (selectedSiz.length > 2) selectedSiz = "NA";
+
+                if (selectedCol.length > 6) selectedCol = "NTAV";
+
+               $("#ReferenceCode")
+                    .val(selectedCat.slice(0, 2).toUpperCase() +
+                        selectedMod.slice(0, 2).toUpperCase() +
+                        selectedSiz.slice(0, 2).toUpperCase() +
+                        selectedCol.slice(0, 4).toUpperCase() + "$" +
+                        selectedSup.slice(0, 4).toUpperCase() + "#");
+
+            });
+
+
+             $("#SizeId").change(function () {
+                var selectedMod = $("#ProductModelId option:selected").text();
+                var selectedCat = $("#CategoryId option:selected").text();
+                var selectedSup = $("#SupplierId option:selected").text();
+                var selectedSiz = $("#SizeId option:selected").text();
+                var selectedCol = $("#ColorId option:selected").text();
+
+                if (selectedSiz.length == 1) selectedSiz += "X";
+                else if (selectedSiz.length > 2) selectedSiz = "NA";
+
+                if (selectedCol.length > 6) selectedCol = "NTAV";
+
+                $("#ReferenceCode")
+                    .val(selectedCat.slice(0, 2).toUpperCase() +
+                        selectedMod.slice(0, 2).toUpperCase() +
+                        selectedSiz.slice(0, 2).toUpperCase() +
+                        selectedCol.slice(0, 4).toUpperCase() + "$" +
+                        selectedSup.slice(0, 4).toUpperCase() + "#");
+
+            });
+
+             $("#ColorId").change(function () {
+                var selectedMod = $("#ProductModelId option:selected").text();
+                var selectedCat = $("#CategoryId option:selected").text();
+                var selectedSup = $("#SupplierId option:selected").text();
+                var selectedSiz = $("#SizeId option:selected").text();
+                var selectedCol = $("#ColorId option:selected").text();
+
+                if (selectedSiz.length == 1) selectedSiz += "X";
+                else if (selectedSiz.length > 2) selectedSiz = "NA";
+
+                if (selectedCol.length > 6) selectedCol = "NTAV";
+
+                $("#ReferenceCode")
+                    .val(selectedCat.slice(0, 2).toUpperCase() +
+                        selectedMod.slice(0, 2).toUpperCase() +
+                        selectedSiz.slice(0, 2).toUpperCase() +
+                        selectedCol.slice(0, 4).toUpperCase() + "$" +
+                        selectedSup.slice(0, 4).toUpperCase() + "#");
+
+            });
+
+
+            $.validator.methods.range = function (value, element, param) {
+                var globalizedValue = value.replace(",", ".");
+                return this.optional(element) || (globalizedValue >= param[0] && globalizedValue <= param[1]);
+            }
+
+            $.validator.methods.number = function (value, element) {
+                return this.optional(element) || /^-?(?:\d+|\d{1,3}(?:[\s\.,]\d{3})+)(?:[\.,]\d+)?$/.test(value);
+            }
+        });
+
+    </script>
+
+
+}

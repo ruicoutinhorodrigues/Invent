@@ -1,0 +1,185 @@
+﻿@model IEnumerable<Invent.Web.Data.Entities.Product>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="container text-center d-none d-print-block">
+    <img src="~/images/ams.png" style="width: 300px;" />
+</div>
+
+<div class="container">
+    <div class="row d-print-none">
+        <div class="col-md-4">
+            <img src="@Url.Content(ViewBag.InventoryImage)" alt="inventory-image" style="width: 100%; height:250px;" />
+        </div>
+        <div class="col-md-8 text-center">
+            <div class="container d-print-none" style="color: #E9FAFF; background-color: #0092CB; height:250px;">
+                <br /><br />
+                <h2>Inventory: @ViewBag.CurrentInventory</h2>
+                <br /><br />
+                <h5>Manager: @ViewBag.InventoryUser</h5>
+                <br />
+            </div>
+        </div>
+    </div>
+</div>
+
+<br /><br />
+<div class="clearfix"></div>
+
+
+<div class="container d-print-none">
+    <div class="row text-center">
+        <div class="col-md-4 text-left">
+            <a asp-action="Create" asp-route-inventoryId="@ViewBag.InventoryId" class="btn btn-success" style="width: 100%; min-height: 80px; padding: 15px;">
+                <i class="fas fa-dolly-flatbed"></i>
+                <br />
+                New
+            </a>
+        </div>
+        <div class="col-md-2">
+            <a asp-action="Excel" asp-route-inventoryId="@ViewBag.InventoryId" class="btn" style=" min-height: 80px; width: 100%; padding: 15px; color: #306C4F; background-color: #C7E6C7">
+                <i class="far fa-file-excel"></i>
+                <br />
+                Excel
+            </a>
+        </div>
+        <div class="col-md-2">
+            <a href="javascript:window.print()" id="print" class="btn" style=" min-height: 80px; width: 100%; padding: 15px; color: #E83532; background-color: #BFC0C2;">
+                <i class="fas fa-print"></i>
+                <br />
+                PDF
+            </a>
+        </div>
+        <div class="col-md-2">
+            <a asp-area="" asp-controller="Stats" asp-action="Index" asp-route-inventoryId="@ViewBag.InventoryId" class="btn btn-dark" style=" min-height: 80px; width: 100%; padding: 15px;">
+                <i class="far fa-chart-bar"></i>
+                <br />
+                Stats
+            </a>
+        </div>
+        <div class="col-md-2">
+            <a asp-area="" asp-controller="Tickets" asp-action="Index" asp-route-inventoryId="@ViewBag.InventoryId" class="btn btn-danger " style="min-height: 80px; width: 100%; padding: 15px;">
+                <i class="far fa-flag"></i>
+                <br />
+                Reports <span class="badge badge-light">@ViewBag.OpenTickets</span>
+            </a>
+        </div>
+    </div>
+</div>
+<div class="clearfix"></div>
+<br />
+
+<div class="container">
+    <table id="example" class="table table-bordered dt-responsive nowrap" style="width:100%; text-align: center;">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.ReferenceCode)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Value)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ImageUrl)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.LastChangeDate)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Location)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Category)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.ProductModel)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Supplier)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody style="font-size: 0.75em;">
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ReferenceCode)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Value)
+                    </td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.ImageUrl))
+                        {
+                            <img src="@Url.Content(item.ImageUrl)" alt="image" style="width: 40px; max-width: 100%; height: auto;" />
+                        }
+                        else
+                        {
+                            <img src="~/images/no-image.png" alt="image" style="width: 40px; max-width: 100%; height: auto;" />
+                        }
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.LastChangeDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Location.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Status.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Category.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.ProductModel.Name)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Supplier.Name)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id"><i class="fas fa-id-card d-print-none"></i> </a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<br /><br />
+<div class="form-group d-print-none">
+    <a asp-action="Index" asp-controller="Inventories" class="btn btn-info btn-block">Back to inventories</a>
+</div>
+
+<style>
+    td {
+        height: 80px;
+        vertical-align: middle !important;
+    }
+</style>
+
+@section Scripts {
+
+    <script type="text/javascript">
+
+        $(function () {
+            $('#example').DataTable({
+                "order": [[ 3, "desc" ]],
+                "columnDefs": [{
+                    "targets": 2,
+                    "orderable": false
+                },
+                {
+                    "targets": 9,
+                    "orderable": false
+                }]
+            });
+        });
+
+    </script>
+}

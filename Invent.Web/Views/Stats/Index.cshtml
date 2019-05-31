@@ -1,0 +1,509 @@
+﻿@model StatViewModel
+@{
+
+    var LocationXLabels = Newtonsoft.Json.JsonConvert.SerializeObject(Model.VLocations.Select(t => t.Dimension).ToList());
+    var LocationYValues = Newtonsoft.Json.JsonConvert.SerializeObject(Model.VLocations.Select(x => x.Quantity).ToList());
+
+    var CategoryXLabels = Newtonsoft.Json.JsonConvert.SerializeObject(Model.VCategories.Select(t => t.Dimension).ToList());
+    var CategoryYValues = Newtonsoft.Json.JsonConvert.SerializeObject(Model.VCategories.Select(x => x.Quantity).ToList());
+
+    var SupplierXLabels = Newtonsoft.Json.JsonConvert.SerializeObject(Model.VSuppliers.Select(t => t.Dimension).ToList());
+    var SupplierYValues = Newtonsoft.Json.JsonConvert.SerializeObject(Model.VSuppliers.Select(x => x.Quantity).ToList());
+
+    var StatusXLabels = Newtonsoft.Json.JsonConvert.SerializeObject(Model.VStatus.Select(t => t.Dimension).ToList());
+    var StatusYValues = Newtonsoft.Json.JsonConvert.SerializeObject(Model.VStatus.Select(x => x.Quantity).ToList());
+
+    var ValueMonthXLabels = Newtonsoft.Json.JsonConvert.SerializeObject(Model.ValueMonth.Select(t => t.Month.ToString("MMMM")).ToList());
+    var ValueMonthYValues = Newtonsoft.Json.JsonConvert.SerializeObject(Model.ValueMonth.Select(x => x.TotalValue).ToList());
+
+    ViewData["Title"] = "Bar Chart";
+}
+
+@*<h2 style="text-align: center; margin-bottom: 10%;">Inventory Statistics</h2>*@
+<h1 style="text-align:center; color: #E9FAFF; background-color: #0092CB; padding: 1%;">Inventory Statistics</h1>
+
+<br /><br />
+
+
+<div class="container">
+    <div class="row text-center">
+        <div class="col-md-3">
+            <a class="btn" style="border:3px solid #0092CB; width: 100%; min-height: 80px; padding: 15px; margin-bottom: 5%;" data-toggle="collapse" href="#collapseLocation-Status" role="button" aria-expanded="false" aria-controls="collapseLocation-Status">
+                <i class="fas fa-chart-bar"></i>
+                <br />
+                Locations & Status
+            </a>
+        </div>
+
+        <div class="col-md-3">
+            <a class="btn" style="border:3px solid #0092CB; width: 100%; min-height: 80px; padding: 15px; margin-bottom: 5%;" data-toggle="collapse" href="#collapseCategory" role="button" aria-expanded="false" aria-controls="collapseCategory">
+                <i class="fas fa-chart-bar"></i>
+                <br />
+                Categories
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a class="btn" style="border:3px solid #0092CB; width: 100%; min-height: 80px; padding: 15px; margin-bottom: 5%;" data-toggle="collapse" href="#collapseSupplier" role="button" aria-expanded="false" aria-controls="collapseSupplier">
+                <i class="fas fa-chart-bar"></i>
+                <br />
+                Suppliers
+            </a>
+        </div>
+        <div class="col-md-3">
+            <a class="btn" style="border:3px solid #0092CB; width: 100%; min-height: 80px; padding: 15px; margin-bottom: 5%;" data-toggle="collapse" href="#collapseEntryValue" role="button" aria-expanded="false" aria-controls="collapseEntryValue">
+                <i class="fas fa-chart-area"></i>
+                <br />
+                Entries/Value
+            </a>
+        </div>
+    </div>
+</div>
+<br />
+<br />
+<div class="collapse" id="collapseLocation-Status">
+    <div class="card card-body">
+        <div class="row">
+            <div class="col-md-6 text-center" style="margin-bottom: 15%;">
+                <div class="chart-container" style="position: relative; height:40vh; min-width:20vw">
+                    <h3>Locations chart</h3>
+                    <br /><br />
+                    <canvas id="LocationChart" style="width:100%;"></canvas>
+                </div>
+            </div>
+            <div class="col-md-6 text-center">
+                <div class="chart-container" style="position: relative; height:40vh; min-width:30vw">
+                    <h3>Status chart</h3>
+                    <br /><br />
+                    <canvas id="StatusChart" style="width:100%;"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="collapse" id="collapseCategory">
+    <div class="card card-body">
+        <div class="col-md-12 text-center" style="margin-bottom: 15%;">
+            <div class="chart-container" style="position: relative; height:40vh; min-width:60vw">
+                <h3>Categories chart</h3>
+                <br /><br />
+                <canvas id="CategoryChart" style="width:100%;"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="collapse" id="collapseSupplier">
+    <div class="card card-body">
+        <div class="col-md-12 text-center" style="margin-bottom: 15%;">
+            <div class="chart-container" style="position: relative; height:40vh; min-width:60vw">
+                <h3>Suppliers chart</h3>
+                <br /><br />
+                <canvas id="SupplierChart" style="width:100%;"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="collapse" id="collapseEntryValue">
+    <div class="card card-body" style="height: 450px;">
+        <div class="col-md-12 text-center">
+            <div class="chart-container" style="position: relative; height:40vh; min-width:60vw">
+                <h3>Entries value/month chart</h3>
+                <br /><br />
+                <canvas id="ValueMonthChart" style="width:100%;"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="form-group" style="margin-top: 5%;">
+    <a asp-action="Index" asp-controller="Products" asp-route-inventoryId=@ViewBag.InventoryId class="btn btn-info btn-block">Back to Products</a>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+<script type="text/javascript">
+
+    $(function () {
+
+        ///// Location chart /////
+        var ctx = document.getElementById("LocationChart").getContext('2d');
+        var data = {
+            labels: @Html.Raw(LocationXLabels),
+            datasets: [{
+                    label: "Locations Chart",
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 0, 0)',
+                        'rgba(0, 255, 0)',
+                        'rgba(0, 0, 255)',
+                        'rgba(192, 192, 192)',
+                        'rgba(255, 255, 0)',
+                        'rgba(255, 0, 255)'
+                    ],
+                    borderColor: [
+                        'rgba(255,99,132,1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(255, 0, 0)',
+                        'rgba(0, 255, 0)',
+                        'rgba(0, 0, 255)',
+                        'rgba(192, 192, 192)',
+                        'rgba(255, 255, 0)',
+                        'rgba(255, 0, 255)'
+                    ],
+                    borderWidth: 1,
+                    data: @Html.Raw(LocationYValues),
+                }]
+        };
+
+        var options = {
+            maintainAspectRatio: false,
+            legend: {
+                display: false,
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        stepSize: 1,
+                        min: 0,
+                        beginAtZero: true
+                    },
+                    gridLines: {
+                        display: true,
+                        color: "rgba(255,99,164,0.2)"
+                    }
+                }],
+                xAxes: [{
+                    ticks: {
+                        min: 0,
+                        beginAtZero: true
+                    },
+                    gridLines: {
+                        display: false
+                    }
+                }]
+            }
+        };
+
+        var myChart = new Chart(ctx, {
+            options: options,
+            data: data,
+            type: 'bar'
+
+        });
+
+
+        ///// Category chart /////
+        var ctx = document.getElementById("CategoryChart").getContext('2d');
+        var data = {
+                labels: @Html.Raw(CategoryXLabels),
+                datasets: [{
+                    label: "Category Chart",
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 0, 0)',
+                        'rgba(0, 255, 0)',
+                        'rgba(0, 0, 255)',
+                        'rgba(192, 192, 192)',
+                        'rgba(255, 255, 0)',
+                        'rgba(255, 0, 255)'
+                    ],
+                    borderColor: [
+                        'rgba(255,99,132,1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(255, 0, 0)',
+                        'rgba(0, 255, 0)',
+                        'rgba(0, 0, 255)',
+                        'rgba(192, 192, 192)',
+                        'rgba(255, 255, 0)',
+                        'rgba(255, 0, 255)'
+                    ],
+                    borderWidth: 1,
+                    data: @Html.Raw(CategoryYValues),
+                }]
+        };
+
+        var options = {
+            maintainAspectRatio: false,
+            legend: {
+                display: false,
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        stepSize: 1,
+                        min: 0,
+                        beginAtZero: true
+                    },
+                    gridLines: {
+                        display: true,
+                        color: "rgba(255,99,164,0.2)"
+                    }
+                }],
+                xAxes: [{
+                    ticks: {
+                        min: 0,
+                        beginAtZero: true
+                    },
+                    gridLines: {
+                        display: false
+                    }
+                }]
+            }
+        };
+
+        var myChart = new Chart(ctx, {
+            options: options,
+            data: data,
+            type: 'bar'
+
+        });
+
+        ///// Supplier chart /////
+        var ctx = document.getElementById("SupplierChart").getContext('2d');
+        var data = {
+                labels: @Html.Raw(SupplierXLabels),
+                datasets: [{
+                    label: "Supplier Chart",
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 0, 0)',
+                        'rgba(0, 255, 0)',
+                        'rgba(0, 0, 255)',
+                        'rgba(192, 192, 192)',
+                        'rgba(255, 255, 0)',
+                        'rgba(255, 0, 255)'
+                    ],
+                    borderColor: [
+                        'rgba(255,99,132,1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(255, 0, 0)',
+                        'rgba(0, 255, 0)',
+                        'rgba(0, 0, 255)',
+                        'rgba(192, 192, 192)',
+                        'rgba(255, 255, 0)',
+                        'rgba(255, 0, 255)'
+                    ],
+                    borderWidth: 1,
+                    data: @Html.Raw(SupplierYValues),
+                }]
+        };
+
+        var options = {
+            maintainAspectRatio: false,
+            legend: {
+                display: false,
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        stepSize: 1,
+                        min: 0,
+                        beginAtZero: true
+                    },
+                    gridLines: {
+                        display: true,
+                        color: "rgba(255,99,164,0.2)"
+                    }
+                }],
+                xAxes: [{
+                    ticks: {
+                        min: 0,
+                        beginAtZero: true
+                    },
+                    gridLines: {
+                        display: false
+                    }
+                }]
+            }
+        };
+
+        var myChart = new Chart(ctx, {
+            options: options,
+            data: data,
+            type: 'bar'
+
+        });
+
+        ///// Status chart /////
+        var ctx = document.getElementById("StatusChart").getContext('2d');
+        var data = {
+                labels: @Html.Raw(StatusXLabels),
+                datasets: [{
+                    label: "Status Chart",
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 0, 0)',
+                        'rgba(0, 255, 0)',
+                        'rgba(0, 0, 255)',
+                        'rgba(192, 192, 192)',
+                        'rgba(255, 255, 0)',
+                        'rgba(255, 0, 255)'
+                    ],
+                    borderColor: [
+                        'rgba(255,99,132,1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(255, 0, 0)',
+                        'rgba(0, 255, 0)',
+                        'rgba(0, 0, 255)',
+                        'rgba(192, 192, 192)',
+                        'rgba(255, 255, 0)',
+                        'rgba(255, 0, 255)'
+                    ],
+                    borderWidth: 1,
+                    data: @Html.Raw(StatusYValues),
+                }]
+        };
+
+        var options = {
+            maintainAspectRatio: false,
+            legend: {
+                display: false,
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        stepSize: 1,
+                        min: 0,
+                        beginAtZero: true
+                    },
+                    gridLines: {
+                        display: true,
+                        color: "rgba(255,99,164,0.2)"
+                    }
+                }],
+                xAxes: [{
+                    ticks: {
+                        min: 0,
+                        beginAtZero: true
+                    },
+                    gridLines: {
+                        display: false
+                    }
+                }]
+            }
+        };
+
+        var myChart = new Chart(ctx, {
+            options: options,
+            data: data,
+            type: 'bar'
+
+        });
+
+        ///// Value - Month chart /////
+        var ctx = document.getElementById("ValueMonthChart").getContext('2d');
+        var data = {
+                labels: @Html.Raw(ValueMonthXLabels),
+                datasets: [{
+                    label: "Entry value - Month Chart",
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 0, 0)',
+                        'rgba(0, 255, 0)',
+                        'rgba(0, 0, 255)',
+                        'rgba(192, 192, 192)',
+                        'rgba(255, 255, 0)',
+                        'rgba(255, 0, 255)'
+                    ],
+                    borderColor: [
+                        'rgba(255,99,132,1)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 206, 86, 1)',
+                        'rgba(75, 192, 192, 1)',
+                        'rgba(153, 102, 255, 1)',
+                        'rgba(255, 159, 64, 1)',
+                        'rgba(255, 0, 0)',
+                        'rgba(0, 255, 0)',
+                        'rgba(0, 0, 255)',
+                        'rgba(192, 192, 192)',
+                        'rgba(255, 255, 0)',
+                        'rgba(255, 0, 255)'
+                    ],
+                    borderWidth: 1,
+                    data: @Html.Raw(ValueMonthYValues),
+                }]
+        };
+
+        var options = {
+            maintainAspectRatio: false,
+            legend: {
+                display: false,
+            },
+            scales: {
+                yAxes: [{
+                    ticks: {
+                        min: 0,
+                        beginAtZero: true
+                    },
+                    gridLines: {
+                        display: true,
+                        color: "rgba(255,99,164,0.2)"
+                    }
+                }],
+                xAxes: [{
+                    ticks: {
+                        min: 0,
+                        beginAtZero: true
+                    },
+                    gridLines: {
+                        display: false
+                    }
+                }]
+            }
+        };
+
+        var myChart = new Chart(ctx, {
+            options: options,
+            data: data,
+            type: 'line'
+
+        });
+
+    });
+
+
+
+</script>
+
