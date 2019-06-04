@@ -9,13 +9,11 @@ namespace Invent.Web.Controllers
 {
     public class CategoriesController : Controller
     {
-        private readonly DataContext _context;
         private readonly IProductRepository productRepository;
         private readonly ICategoryRepository categoryRepository;
 
-        public CategoriesController(DataContext context, IProductRepository productRepository, ICategoryRepository categoryRepository)
+        public CategoriesController(IProductRepository productRepository, ICategoryRepository categoryRepository)
         {
-            _context = context;
             this.productRepository = productRepository;
             this.categoryRepository = categoryRepository;
         }

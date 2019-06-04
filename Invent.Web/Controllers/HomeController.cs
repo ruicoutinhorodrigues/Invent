@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Invent.Web.Models;
 using Microsoft.AspNetCore.Mvc;
-using Invent.Web.Models;
+using System.Diagnostics;
 
 namespace Invent.Web.Controllers
 {
@@ -12,7 +8,7 @@ namespace Invent.Web.Controllers
     {
         public IActionResult Index()
         {
-            return View();   
+            return View();
 
         }
 

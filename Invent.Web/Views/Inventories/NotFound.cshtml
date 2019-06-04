@@ -1,0 +1,42 @@
+﻿
+@{
+    ViewData["Title"] = "Not Found";
+}
+
+<div class="modal" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">@ViewData["Title"]</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="col-md-10 offset-1 text-center">
+                    <img src="~/images/ams.png" alt="ams" style="width: 200px; margin: 5% auto;" />
+                    <br /><br />
+                    <i class="fas fa-thumbs-down fa-3x"></i>
+                    <br /><br />
+                    <h5>Inventory not found.</h5><br />
+                    <br />
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script type="text/javascript">
+
+        $("#myModal").modal('show');
+
+        $('#myModal').on('hidden.bs.modal', function (e) {
+            document.location.href = "/Inventories";
+        })
+    </script>
+}
+

@@ -1,4 +1,5 @@
 ﻿using Invent.Web.Data.Entities;
+using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,10 @@ namespace Invent.Web.Models
         public List<ProductModel> ProductModels { get; set; }
 
         public List<Supplier> Suppliers { get; set; }
+
+        public List<IdentityUser> Users { get; set; }
+
+
         //public List<Color> Colors { get; set; }
         //public List<Size> Sizes { get; set; }
     }

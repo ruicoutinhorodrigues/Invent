@@ -26,6 +26,8 @@ namespace Invent.Web.Controllers
         {
             var allTickets = await ticketRepository.GetAll().ToListAsync();
 
+            ViewBag.InventoryId = inventoryId;
+
             return View(allTickets.FindAll(t => t.InventoryId == inventoryId));
         }
 

@@ -11,22 +11,24 @@ using Invent.Web.Models;
 using System.IO;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
+using Invent.Web.Data.Repositories;
 
 namespace Invent.Web.Controllers
 {
     public class InventoriesController : Controller
     {
-        private readonly DataContext _context;
-        private readonly ApplicationDbContext _user_context;
+        private readonly IInventoryRepository inventoryRepository;
 
+        private readonly ApplicationDbContext _user_context;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
 
         private readonly IEmailSender _emailSender;
 
-        public InventoriesController(DataContext context, ApplicationDbContext user_context, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, IEmailSender emailSender)
+        public InventoriesController(IInventoryRepository inventoryRepository, ApplicationDbContext user_context, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, IEmailSender emailSender)
         {
-            _context = context;
+            this.inventoryRepository = inventoryRepository;
+
             _user_context = user_context;
 
             _userManager = userManager;
@@ -47,32 +49,33 @@ namespace Invent.Web.Controllers
 
             ViewBag.CurrentUser = user.UserName;
 
-            if (await _userManager.IsInRoleAsync(user, "Manager"))
+            if (await _userManager.IsInRoleAsync(user, "Manager") && !await _userManager.IsInRoleAsync(user, "Admin"))
             {
                 //return View(await _context.Inventory.Where(i => i.UserName == user.UserName).ToListAsync());
 
-                var thisManagerInventory = await _context.Inventory.Where(i => i.UserName == user.UserName).FirstOrDefaultAsync();
+                //var thisManagerInventory = await _context.Inventory.Where(i => i.UserName == user.UserName).FirstOrDefaultAsync();
+                var thisManagerInventory = await this.inventoryRepository.GetAll().Where(i => i.UserName == user.UserName).FirstOrDefaultAsync();
 
                 return RedirectToAction(nameof(Index), "Products", new { inventoryId = thisManagerInventory.Id});
             }
             else
             {
-                return View(await _context.Inventory.ToListAsync());
+                return View(this.inventoryRepository.GetAll());
             }
 
             
         }
 
         // GET: Inventories/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public IActionResult Details(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var inventory = await _context.Inventory
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var inventory = this.inventoryRepository.GetByIdAsync(id.Value);
+
             if (inventory == null)
             {
                 return NotFound();
@@ -124,7 +127,7 @@ namespace Invent.Web.Controllers
 
                 if (thisUser != null)
                 {
-                    _context.Inventory.Add(
+                    await this.inventoryRepository.CreateAsync(
                                         new Inventory
                                         {
                                             Name = inventoryViewModel.Name,
@@ -132,7 +135,6 @@ namespace Invent.Web.Controllers
                                             DateOfCreation = DateTime.Now,
                                             ImageUrl = path
                                         });
-                    await _context.SaveChangesAsync();
 
                     await AddToRole("Manager", thisUser.Email);
 
@@ -160,12 +162,19 @@ namespace Invent.Web.Controllers
                 await _roleManager.CreateAsync(new IdentityRole(role));
             }
 
-            var user = await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindByEmailAsync(email);           
 
-            if (!User.IsInRole(role))
+            if (!await _userManager.IsInRoleAsync(user, "Admin"))
             {
                 await _userManager.AddToRoleAsync(user, role);
             }
+        }
+
+        public async Task RemoveFromRole(string role, string email)
+        {
+            var user = await _userManager.FindByEmailAsync(email);
+
+            await _userManager.RemoveFromRoleAsync(user, role);
         }
 
         // GET: Inventories/Edit/5
@@ -173,13 +182,16 @@ namespace Invent.Web.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                //return NotFound();
+                return View("NotFound");
             }
 
-            var inventory = await _context.Inventory.FindAsync(id);
+            var inventory = await this.inventoryRepository.GetByIdAsync(id.Value);
+
             if (inventory == null)
             {
-                return NotFound();
+                //return NotFound();
+                return View("NotFound");
             }
 
             var thisInventory = new InventoryViewModel()
@@ -201,7 +213,7 @@ namespace Invent.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,UsersId,ImageFile,DateOfCreation")] InventoryViewModel inventoryViewModel)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,UserName,UsersId,ImageUrl,ImageFile,DateOfCreation")] InventoryViewModel inventoryViewModel)
         {
             if (id != inventoryViewModel.Id)
             {
@@ -210,7 +222,7 @@ namespace Invent.Web.Controllers
 
             if (ModelState.IsValid)
             {
-                var path = string.Empty;
+                var path = inventoryViewModel.ImageUrl;
 
                 if (inventoryViewModel.ImageFile != null && inventoryViewModel.ImageFile.Length > 0)
                 {
@@ -234,10 +246,19 @@ namespace Invent.Web.Controllers
 
                 if (thisUser != null)
                 {
+                    var oldUser = _user_context.Users.FirstOrDefault(u => u.UserName == inventoryViewModel.UserName);
+
+                    await RemoveFromRole("Manager", oldUser.Email);
+
+                    await _emailSender.SendEmailAsync(oldUser.Email, "Inventory Manager",
+                       $"It's time to say goodbye. :(<br/><br/>" +
+                       $"You are no longer the manager of the {inventoryViewModel.Name} inventory. We were very fortunate to have you in our team.<br/><br/>" +
+                       "Best regards, AMS");
+
 
                     var updatedInventory = new Inventory()
                     {
-
+                        Id = inventoryViewModel.Id,
                         Name = inventoryViewModel.Name,
                         UserName = _user_context.Users.FirstOrDefault(u => u.Id == inventoryViewModel.UsersId).ToString(),
                         DateOfCreation = DateTime.Now,
@@ -246,14 +267,21 @@ namespace Invent.Web.Controllers
 
                     try
                     {
-                        _context.Update(updatedInventory);
-                        await _context.SaveChangesAsync();
+                        await this.inventoryRepository.UpdateAsync(updatedInventory);
 
                         await AddToRole("Manager", thisUser.Email);
+
+                        await _emailSender.SendEmailAsync(thisUser.Email, "Inventory Manager",
+                        $"Welcome to our team.<br/><br/>" +
+                        $"You are now the proud manager of the {inventoryViewModel.Name} inventory. We expect great things from you! :)<br/><br/>" +
+                        $"Please remember: \"With great power comes great responsibility\" (spiderman)<br/><br/>" +
+                        "Best regards, AMS");
+
+
                     }
                     catch (DbUpdateConcurrencyException)
                     {
-                        if (!InventoryExists(updatedInventory.Id))
+                        if (!await this.inventoryRepository.ExistsAsync(updatedInventory.Id))
                         {
                             return NotFound();
                         }
@@ -263,8 +291,40 @@ namespace Invent.Web.Controllers
                         }
                     }
                     return RedirectToAction(nameof(Index));
-                }             
+                }     
+                else
+                {
+                    var updatedInventory = new Inventory()
+                    {
+                        Id = inventoryViewModel.Id,
+                        Name = inventoryViewModel.Name,
+                        UserName = inventoryViewModel.UserName,
+                        DateOfCreation = inventoryViewModel.DateOfCreation,
+                        ImageUrl = path
+                    };
+
+                    try
+                    {
+                        await this.inventoryRepository.UpdateAsync(updatedInventory);
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        if (!await this.inventoryRepository.ExistsAsync(updatedInventory.Id))
+                        {
+                            return NotFound();
+                        }
+                        else
+                        {
+                            throw;
+                        }
+                    }
+
+                    return RedirectToAction(nameof(Index));
+                }
             }
+
+            ViewData["UsersId"] = new SelectList(_user_context.Users, "Id", "UserName");
+
             return View(inventoryViewModel);
         }
 
@@ -276,8 +336,8 @@ namespace Invent.Web.Controllers
                 return NotFound();
             }
 
-            var inventory = await _context.Inventory
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var inventory = await this.inventoryRepository.GetByIdAsync(id.Value);
+
             if (inventory == null)
             {
                 return NotFound();
@@ -289,17 +349,13 @@ namespace Invent.Web.Controllers
         // POST: Inventories/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int? id)
         {
-            var inventory = await _context.Inventory.FindAsync(id);
-            _context.Inventory.Remove(inventory);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+            var inventory = await this.inventoryRepository.GetByIdAsync(id.Value);
 
-        private bool InventoryExists(int id)
-        {
-            return _context.Inventory.Any(e => e.Id == id);
+            await this.inventoryRepository.DeleteAsync(inventory);
+           
+            return RedirectToAction(nameof(Index));
         }
     }
 }

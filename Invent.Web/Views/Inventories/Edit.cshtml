@@ -4,66 +4,95 @@
     ViewData["Title"] = "Edit";
 }
 
-<h1>Edit</h1>
+@*<h1>Edit</h1>
 
-<h4>Inventory</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="Id" />
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+    <h4>Inventory</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">*@
+<div class="modal" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">@ViewData["Title"]</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
-            <div class="form-group">
-                <label asp-for="DateOfCreation" class="control-label"></label>
-                <div class="input-group">
-                    <div class="form-control">
-                        @Model.DateOfCreation
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="row">
+
+                    <div class="col-md-10 offset-1 text-center">
+                        <img src="~/images/ams.png" alt="ams" style="width: 200px; margin: 5% auto;" />
+                        <br /><br />
+                              <form asp-action="Edit" enctype="multipart/form-data">
+                                  <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                  <input type="hidden" asp-for="Id" />
+                                  <input type="hidden" asp-for="UserName" />
+                                  <input type="hidden" asp-for="DateOfCreation" />
+                                  <input type="hidden" asp-for="ImageUrl" />
+                                  <div class="form-group">
+                                      <label asp-for="Name" class="control-label"></label>
+                                      <input asp-for="Name" class="form-control" />
+                                      <span asp-validation-for="Name" class="text-danger"></span>
+                                  </div>
+                                  <div class="form-group">
+                                      <label class="control-label">Current manager</label>
+                                      <div class="input-group">
+                                          <div class="form-control">
+                                              @Model.UserName
+                                          </div>
+                                      </div>
+                                  </div>
+                                  <div class="form-group">
+                                      <label asp-for="UsersId" class="control-label"></label>
+                                      <div class="input-group">
+                                          <select asp-for="UsersId" class="form-control" asp-items="ViewBag.UsersId">
+                                              <option>Select new manager...</option>
+                                          </select>
+                                          <span asp-validation-for="UsersId" class="text-danger col-md-12"></span>
+                                      </div>
+                                  </div>
+                                  <br />
+                                  <p style="color: red; text-align:start">
+                                      If you change the manager of this inventory a notification email will be sent to the interested users
+                                  </p>
+                                  <br />
+
+
+                                  <div class="form-group">
+                                      <label asp-for="ImageFile" class="control-label"></label>
+                                      <input asp-for="ImageFile" class="form-control" type="file" />
+                                      <span asp-validation-for="ImageFile" class="text-danger"></span>
+                                  </div>
+
+                                  <div class="form-group">
+                                      <input type="submit" value="Update" class="btn btn-primary btn-block" />
+                                  </div>
+                              </form>
                     </div>
                 </div>
             </div>
-
-            <div class="form-group">
-                <label class="control-label">Current manager</label>
-                <div class="input-group">
-                    <div class="form-control">
-                        @Model.UserName
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="form-group">
-                <label asp-for="UsersId" class="control-label"></label>
-                <div class="input-group">
-                    <select asp-for="UsersId" class="form-control" asp-items="ViewBag.UsersId">
-                        <option>Select new manager...</option>
-                    </select>
-                    <span asp-validation-for="UsersId" class="text-danger col-md-12"></span>
-                </div>
-            </div>
-
-            <div class="form-group">
-                <label asp-for="ImageFile" class="control-label"></label>
-                <input asp-for="ImageFile" class="form-control" type="file" />
-                <span asp-validation-for="ImageFile" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+@*<div>
+        <a asp-action="Index">Back to List</a>
+    </div>*@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+
+        $("#myModal").modal('show');
+
+        $('#myModal').on('hidden.bs.modal', function (e) {
+
+            document.location.href = "/Inventories";
+
+        })
+    </script>
 }

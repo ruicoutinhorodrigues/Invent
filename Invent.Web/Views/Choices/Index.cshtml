@@ -4,6 +4,10 @@
     var context = @Context.Request.Path + @Context.Request.QueryString;
 }
 
+    <div class="text-center">
+        <h1 style="color: #E9FAFF; background-color: #0092CB; padding: 1%;">Admin page</h1>
+    </div>
+
 
 <div class="container" id="box">
     <div class="row">
@@ -249,50 +253,81 @@
             </table>
         </div>
     </div>
-</div>
+    </div>
+<div class="container" id="box">
+    <div class="col-md-8 offset-md-2">
+        <div class="table-title">
+            <div class="row">
+                <div class="col-md-8">
+                    <h5>Users</h5>
+                </div>
+                <div class="col-md-4">
+                    <a class="btn btn-primary btn-block" asp-area="Identity" asp-page="/Account/Register" asp-route-returnUrl=@context>New</a>
+                </div>
+            </div>
+        </div>
+        <br />
+        <div class="table-wrapper-scroll-y my-custom-scrollbar" id="style1">
+            <table class="table">
+                <tbody>
+                    @foreach (var item in Model.Users)
+                    {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.UserName)
+                            </td>
+                            <td style="text-align:right">
+                                <a asp-action="DeleteUser" asp-route-userId="@item.Id"><i class="far fa-trash-alt"></i></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </div>
+    <style>
+        #box {
+            border: 1px solid #007BFF;
+            margin-top: 3%;
+            padding: 5% 2%;
+            background-color: azure;
+        }
 
-<style>
-    #box {
-        border: 1px solid #007BFF;
-        margin-top: 3%;
-        padding: 5% 2%;
-        background-color: azure;
-    }
+        .my-custom-scrollbar {
+            position: relative;
+            height: 350px;
+            overflow: auto;
+        }
 
-    .my-custom-scrollbar {
-        position: relative;
-        height: 350px;
-        overflow: auto;
-    }
+        .table-wrapper-scroll-y {
+            display: block;
+        }
 
-    .table-wrapper-scroll-y {
-        display: block;
-    }
+        #style1::-webkit-scrollbar {
+            width: 8px;
+            border: 2px solid #fff;
+            border-radius: 5px;
+        }
 
-    #style1::-webkit-scrollbar {
-        width: 8px;
-        border: 2px solid #fff;
-        border-radius: 5px;
-    }
+        #style1::-webkit-scrollbar-thumb {
+            background: #0092CB;
+            border-radius: 5px;
+        }
 
-    #style1::-webkit-scrollbar-thumb {
-        background: #0092CB;
-        border-radius: 5px;
-    }
+        h5 {
+            text-align: center;
+            vertical-align: middle;
+            padding: 0.5rem 0.8rem;
+        }
 
-    h5 {
-        text-align: center;
-        vertical-align: middle;
-        padding: 0.5rem 0.8rem;
-    }
-
-    a i {
-        margin: 3px;
-    }
+        a i {
+            margin: 3px;
+        }
 
 
-    .table-title {
-        background: #435d7d;
-        color: #fff;
-    }
-</style>
+        .table-title {
+            background: #435d7d;
+            color: #fff;
+        }
+    </style>

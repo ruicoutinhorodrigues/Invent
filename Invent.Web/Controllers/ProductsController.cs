@@ -54,11 +54,21 @@ namespace Invent.Web.Controllers
         }
 
         // GET: Products
-        public async Task<IActionResult> Index(int inventoryId)
+        public async Task<IActionResult> Index(int? inventoryId)
         {
-             var inventory = await this.inventoryRepository.GetByIdAsync(inventoryId);
+            var inventory = await this.inventoryRepository.GetByIdAsync(inventoryId.Value);
+
+            if (inventory == null)
+            {
+                return NotFound();
+            }
 
             var user = await _userManager.GetUserAsync(HttpContext.User);
+
+            if (user == null)
+            {
+                return RedirectToAction(nameof(Index), "Home");
+            }
 
             if (inventory.UserName == user.UserName || user.UserName == "rui.coutinho.rodrigues@gmail.com") //admin added in seed
             {

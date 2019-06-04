@@ -4,48 +4,75 @@
     ViewData["Title"] = "Create";
 }
 
-<h1>Create</h1>
+<div class="modal" id="myModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
 
-<h4>Inventory</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create" enctype="multipart/form-data">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">@ViewData["Title"]</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
             </div>
 
-            <div class="form-group">
-                <label asp-for="UsersId" class="control-label"></label>
-                <div class="input-group">
-                    <select asp-for="UsersId" class="form-control" asp-items="ViewBag.UsersId">
-                        <option>Select manager...</option>
-                    </select>
-                    <a class="btn btn-primary" asp-area="Identity" asp-page="/Account/Register" asp-route-returnUrl="/Inventories/Create">New</a>
-                    <span asp-validation-for="UsersId" class="text-danger col-md-12"></span>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <div class="row">
+
+                    <div class="col-md-10 offset-1 text-center">
+                        <img src="~/images/ams.png" alt="ams" style="width: 200px; margin: 5% auto;" />
+                        <br /><br />
+                        <form asp-action="Create" enctype="multipart/form-data">
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="form-group">
+                                <label asp-for="Name" class="control-label"></label>
+                                <input asp-for="Name" class="form-control" />
+                                <span asp-validation-for="Name" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="UsersId" class="control-label"></label>
+                                <div class="input-group">
+                                    <select asp-for="UsersId" class="form-control" asp-items="ViewBag.UsersId">
+                                        <option>Select manager...</option>
+                                    </select>
+                                    <a class="btn btn-primary" asp-area="Identity" asp-page="/Account/Register" asp-route-returnUrl="/Inventories/Create">New</a>
+                                    <span asp-validation-for="UsersId" class="text-danger col-md-12"></span>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label asp-for="ImageFile" class="control-label"></label>
+                                <input asp-for="ImageFile" class="form-control" type="file" />
+                                <span asp-validation-for="ImageFile" class="text-danger"></span>
+                            </div>
+
+                            <b></b>
+
+                            <div class="form-group">
+                                <input type="submit" value="Create" class="btn btn-primary btn-block" />
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
-
-            <div class="form-group">
-                <label asp-for="ImageFile" class="control-label"></label>
-                <input asp-for="ImageFile" class="form-control" type="file" />
-                <span asp-validation-for="ImageFile" class="text-danger"></span>
-            </div>
-
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        </div>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+@*<div>
+        <a asp-action="Index">Back to List</a>
+    </div>*@
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+    <script type="text/javascript">
+
+        $("#myModal").modal('show');
+
+        $('#myModal').on('hidden.bs.modal', function (e) {
+
+            document.location.href = "/Inventories";
+
+        })
+    </script>
 }

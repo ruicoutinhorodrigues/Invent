@@ -8,7 +8,6 @@ namespace Invent.Web.Controllers
 {
     public class ManufacturersController : Controller
     {
-        //private readonly DataContext _context;
         private readonly IProductRepository productRepository;
         private readonly IManufacturerRepository manufacturerRepository;
 
