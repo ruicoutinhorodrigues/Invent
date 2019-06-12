@@ -1,55 +1,41 @@
 ﻿using Invent.Common.Models;
 using Invent.Common.Services;
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Text;
 using Xamarin.Forms;
 
 namespace Invent.UIForms.ViewModels
 {
-    public class ProductsViewModel : INotifyPropertyChanged
+    public class ProductsViewModel : BaseViewModel
     {
         private ApiService apiService;
 
-        private ObservableCollection<Product> _products;
+        private NetService netService;
 
-        private bool _isRefreshing;
+        private ObservableCollection<Product> products;
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        private bool isRefreshing;
+
+        private string userEmail;
 
         public ObservableCollection<Product> Products
         {
-            get { return this._products; }
-
-            set
-            {
-                if (this._products != value)
-                {
-                    this._products = value;
-                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("Products"));
-                }
-            }
+            get => this.products;
+            set => this.SetValue(ref this.products, value);
         }
 
         public bool IsRefreshing
         {
-            get { return this._isRefreshing; }
-
-            set
-            {
-                if (this._isRefreshing != value)
-                {
-                    this._isRefreshing = value;
-                    PropertyChanged.Invoke(this, new PropertyChangedEventArgs("IsRefreshing"));
-                }
-            }
+            get => this.isRefreshing;
+            set => this.SetValue(ref this.isRefreshing, value);
         }
 
-        public ProductsViewModel()
+
+        public ProductsViewModel(string userEmail)
         {
+            this.userEmail = userEmail;
             this.apiService = new ApiService();
+            this.netService = new NetService();
             this.LoadProducts();
         }
 
@@ -58,12 +44,26 @@ namespace Invent.UIForms.ViewModels
         {
             this.IsRefreshing = true;
 
-            var response = await this.apiService.GetListAsync<Product>(
-                "https://localhost:44323",
-                "/api",
-                "/products");
+            var connection = await this.netService.CheckConnection();
+            if (!connection.IsSuccess)
+            {
+                await Application.Current.MainPage.DisplayAlert(
+                    "Error",
+                    connection.Message,
+                    "Accept");
+                return;
+            }
 
-            this.IsRefreshing = true;
+            var url = Application.Current.Resources["UrlAPI"].ToString();
+
+            var response = await this.apiService.GetListAsync<Product>(
+                url,
+                "/api",
+                "/products",
+                "bearer",
+                MainViewModel.GetInstance().Token.Token);
+
+            this.IsRefreshing = false;
 
             if (!response.IsSuccess)
             {
@@ -76,7 +76,16 @@ namespace Invent.UIForms.ViewModels
             }
 
             var myProducts = (List<Product>)response.Result;
-            this._products = new ObservableCollection<Product>(myProducts);
+
+            foreach (var product in myProducts)
+            {
+                if (product.ImageFullPath == null)
+                {
+                    product.ImageFullPath = "https://inventory2019.ddns.net/images/no-image.png";
+                }
+            }
+
+            this.Products = new ObservableCollection<Product>(myProducts.FindAll(p => p.InventoryManagerName == this.userEmail));
         }
     }
 }

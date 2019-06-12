@@ -2,6 +2,8 @@
 
 @{
     ViewData["Title"] = "Edit";
+
+    var context = @Context.Request.Path + @Context.Request.QueryString;
 }
 
 <h1>Edit</h1>
@@ -166,7 +168,7 @@
                     <label asp-for="Location" class="control-label"></label>
                     <div class="input-group">
                         <select asp-for="LocationId" class="form-control" asp-items="ViewBag.LocationId"></select>
-                        <a class="btn btn-primary" asp-area="" asp-controller="Locations" asp-action="Create">New</a>
+                        <a class="btn btn-primary" asp-area="" asp-controller="Locations" asp-action="Create" asp-route-inventoryId="@Model.InventoryId" asp-route-returnUrl="@context">New</a>
                         <span asp-validation-for="LocationId" class="text-danger  col-md-12"></span>
                     </div>
                 </div>
@@ -174,7 +176,7 @@
                     <label asp-for="Status" class="control-label"></label>
                     <div class="input-group">
                         <select asp-for="StatusId" class="form-control" asp-items="ViewBag.StatusId"></select>
-                        <a class="btn btn-primary" asp-area="" asp-controller="Status" asp-action="Create">New</a>
+                        <a class="btn btn-primary" asp-area="" asp-controller="Status" asp-action="Create" asp-route-inventoryId="@Model.InventoryId" asp-route-returnUrl="@context">New</a>
                         <span asp-validation-for="StatusId" class="text-danger  col-md-12"></span>
                     </div>
                 </div>

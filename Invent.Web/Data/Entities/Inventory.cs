@@ -15,6 +15,7 @@ namespace Invent.Web.Data.Entities
         [Display(Name = "User name")]
         public string UserName { get; set; }
 
+        public bool NotAvailable { get; set; }
 
 
         [Display(Name = "Date of creation")]

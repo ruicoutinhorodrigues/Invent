@@ -48,7 +48,7 @@ namespace Invent.Web.Data.Entities
                 }
 
                 //ATENÇÃO --- MUDAR PARA NOME DO SERVIDOR
-                return $"https://localhost:44323{this.ImageUrl.Substring(1)}";
+                return $"https://inventory2019.ddns.net{this.ImageUrl.Substring(1)}";
             }
         }
 

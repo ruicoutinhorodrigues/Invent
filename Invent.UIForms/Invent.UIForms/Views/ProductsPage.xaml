@@ -16,31 +16,81 @@
                     <DataTemplate>
                         <ViewCell>
                             <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
                                     <ColumnDefinition Width="Auto"/>
                                     <ColumnDefinition Width="*"/>
                                 </Grid.ColumnDefinitions>
-                                <Image
+                                <Label
+                                    Grid.Row="0"
+                                    Grid.ColumnSpan="3"
+                                    Text="{Binding Category}"
+                                    FontSize="Medium"
+                                    FontAttributes="Bold"
+                                    TextColor="White"
+                                    BackgroundColor="#0092CB"
+                                    HorizontalTextAlignment="Center"
+                                    Margin="0, 10, 0, 5">
+                                </Label>
+                                <StackLayout
+                                    Grid.Row="1"
                                     Grid.Column="0"
+                                    VerticalOptions="Center"
+                                    >
+                                    <Label                                  
+                                        Text="{Binding ReferenceCode}"
+                                        TextColor="White"
+                                        BackgroundColor="#A5A6A9"
+                                        FontSize="11"
+                                        HorizontalTextAlignment="Center">
+                                    </Label>
+                                    <Label
+                                        Text="{Binding ProductModel, StringFormat='Model: {0:N}'}"
+                                        TextColor="Black"
+                                        FontSize="10"
+                                        HorizontalTextAlignment="Center">
+                                    </Label>
+                                    <Label
+                                        Text="{Binding Value, StringFormat='Value: {0:C2}'}"
+                                        TextColor="Navy"
+                                        FontSize="10"
+                                        HorizontalTextAlignment="Center">
+                                    </Label>
+                                </StackLayout>
+                                <Image
+                                    Grid.Row="1"
+                                    Grid.Column="1"
                                     Source="{Binding ImageFullPath}"
                                     WidthRequest="100">
                                 </Image>
                                 <StackLayout
-                                    Grid.Column="1"
+                                    Grid.Row="1"
+                                    Grid.Column="2"
                                     VerticalOptions="Center">
                                     <Label
-                                        FontAttributes="Bold"
-                                        FontSize="Medium"
-                                        Text="{Binding Name}"
-                                        TextColor="Black">
+                                        Text="{ Binding Location, StringFormat='Location: {0:N}'}"
+                                        TextColor="White"
+                                        BackgroundColor="#00B6E5"
+                                        FontSize="10"
+                                        HorizontalTextAlignment="Center">
                                     </Label>
                                     <Label
-                                        Text="{Binding Price, StringFormat='Price: {0:C2}'}"
-                                        TextColor="Navy">
+                                        Text="{Binding Status, StringFormat='Status: {0:N}'}"
+                                        TextColor="White"
+                                        BackgroundColor="#00B6E5"
+                                        FontSize="10"
+                                        HorizontalTextAlignment="Center">
                                     </Label>
                                     <Label
-                                        Text="{Binding Stock, StringFormat='Stock: {0:N2}'}"
-                                        TextColor="Black">
+                                        Text="{Binding Supplier, StringFormat='     Supplier: {0:N}'}"
+                                       TextColor="White"
+                                        BackgroundColor="#00B6E5"
+                                        FontSize="10"
+                                        HorizontalTextAlignment="Center">
                                     </Label>
                                 </StackLayout>
                             </Grid>

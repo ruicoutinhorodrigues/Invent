@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Invent.Common.Models;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -8,13 +9,14 @@ namespace Invent.UIForms.ViewModels
     {
         private static MainViewModel instance;
 
+        public TokenResponse Token { get; set; }
+
         public LoginViewModel Login { get; set; }
 
         public ProductsViewModel Products { get; set; }
 
         public MainViewModel()
         {
-            //this.Login = new LoginViewModel();
             instance = this;
         }
 

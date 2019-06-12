@@ -26,7 +26,7 @@
 
                     <div class="col-md-10 offset-1 text-center">
                         <img src="~/images/ams.png" alt="ams" style="width: 200px; margin: 5% auto;" />
-                        <br /><br />
+                        <br />
                               <form asp-action="Edit" enctype="multipart/form-data">
                                   <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                                   <input type="hidden" asp-for="Id" />
@@ -60,14 +60,12 @@
                                       If you change the manager of this inventory a notification email will be sent to the interested users
                                   </p>
                                   <br />
-
-
                                   <div class="form-group">
                                       <label asp-for="ImageFile" class="control-label"></label>
                                       <input asp-for="ImageFile" class="form-control" type="file" />
                                       <span asp-validation-for="ImageFile" class="text-danger"></span>
                                   </div>
-
+                                  <br />
                                   <div class="form-group">
                                       <input type="submit" value="Update" class="btn btn-primary btn-block" />
                                   </div>

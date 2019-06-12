@@ -37,8 +37,9 @@ namespace Invent.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Location location, string inventoryId)
+        public async Task<IActionResult> Create([Bind("Id,Name")] Location location, string inventoryId, string returnUrl)
         {
+
             if (await this.locationRepository.ExistsNameAsync(location.Name))
             {
                 ViewBag.AlreadyExists = "This Location already exists in your system.";
@@ -59,6 +60,12 @@ namespace Invent.Web.Controllers
                     return RedirectToAction(nameof(Index), "Choices");
                 }
 
+                if (returnUrl.Split("/")[2] == "Edit")
+                {
+                    var id = returnUrl.Split("/")[3];
+
+                    return RedirectToAction(nameof(Edit), "Products", new { id });
+                }
                 return RedirectToAction(nameof(Create), "Products", new { inventoryId });
             }
 

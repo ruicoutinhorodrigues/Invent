@@ -79,7 +79,7 @@ namespace Invent.Web.Areas.Identity.Pages.Account
             if (result.Succeeded)
             {
                 _logger.LogInformation("{Name} logged in with {LoginProvider} provider.", info.Principal.Identity.Name, info.LoginProvider);
-                return LocalRedirect(returnUrl);
+                return LocalRedirect("/inventories"); //returnUrl
             }
             if (result.IsLockedOut)
             {

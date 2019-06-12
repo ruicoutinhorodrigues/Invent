@@ -18,6 +18,7 @@ namespace Invent.Web.Controllers
     public class InventoriesController : Controller
     {
         private readonly IInventoryRepository inventoryRepository;
+        private readonly IProductRepository productRepository;
 
         private readonly ApplicationDbContext _user_context;
         private readonly UserManager<IdentityUser> _userManager;
@@ -25,9 +26,10 @@ namespace Invent.Web.Controllers
 
         private readonly IEmailSender _emailSender;
 
-        public InventoriesController(IInventoryRepository inventoryRepository, ApplicationDbContext user_context, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, IEmailSender emailSender)
+        public InventoriesController(IInventoryRepository inventoryRepository, IProductRepository productRepository, ApplicationDbContext user_context, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager, IEmailSender emailSender)
         {
             this.inventoryRepository = inventoryRepository;
+            this.productRepository = productRepository;
 
             _user_context = user_context;
 
@@ -60,7 +62,7 @@ namespace Invent.Web.Controllers
             }
             else
             {
-                return View(this.inventoryRepository.GetAll());
+                return View(this.inventoryRepository.GetAll().Where(i => i.NotAvailable != true));
             }
 
             
@@ -87,7 +89,21 @@ namespace Invent.Web.Controllers
         // GET: Inventories/Create
         public IActionResult Create()
         {
-            ViewData["UsersId"] = new SelectList(_user_context.Users, "Id", "UserName");
+            var availableUsers = _user_context.Users.ToList();
+
+            //Each manager can have only one inventory. The admin can have as many as he wants.
+            foreach (var manager in this.inventoryRepository.GetAll())
+            {
+                foreach (var user in _user_context.Users)
+                {
+                    if (manager.UserName == user.UserName && user.UserName != "rui.coutinho.rodrigues@gmail.com")
+                    {
+                        availableUsers.Remove(user);
+                    }
+                }
+            }
+
+            ViewData["UsersId"] = new SelectList(availableUsers, "Id", "UserName");
 
             return View();
         }
@@ -136,21 +152,37 @@ namespace Invent.Web.Controllers
                                             ImageUrl = path
                                         });
 
-                    await AddToRole("Manager", thisUser.Email);
+                    if (!await _userManager.IsInRoleAsync(thisUser, "Admin"))
+                    {
+                        await AddToRole("Manager", thisUser.Email);
 
-                    await _emailSender.SendEmailAsync(thisUser.Email, "Inventory Manager",
-                        $"Welcome to our team.<br/><br/>" +
-                        $"You are now the proud manager of the {inventoryViewModel.Name} inventory. We expect great things from you! :)<br/><br/>" +
-                        $"Please remember: \"With great power comes great responsibility\" (spiderman)<br/><br/>" +
-                        "Best regards, AMS");
+                        await _emailSender.SendEmailAsync(thisUser.Email, "Inventory Manager",
+                            $"Welcome to our team.<br/><br/>" +
+                            $"You are now the proud manager of the {inventoryViewModel.Name} inventory. We expect great things from you! :)<br/><br/>" +
+                            $"Please remember: \"With great power comes great responsibility\" (spiderman)<br/><br/>" +
+                            "Best regards, AMS");
 
-
+                        
+                    }
 
                     return RedirectToAction(nameof(Index));
                 }             
             }
 
-            ViewData["UsersId"] = new SelectList(_user_context.Users, "Id", "UserName");
+            var availableUsers = _user_context.Users.ToList();
+
+            //Each manager can have only one inventory. The admin can have as many as he wants.
+            foreach (var manager in this.inventoryRepository.GetAll())
+            {
+                foreach (var user in _user_context.Users)
+                {
+                    if (manager.UserName == user.UserName && user.UserName != "rui.coutinho.rodrigues@gmail.com")
+                    {
+                        availableUsers.Remove(user);
+                    }
+                }
+            }
+            ViewData["UsersId"] = new SelectList(availableUsers, "Id", "UserName");
 
             return View(inventoryViewModel);
         }
@@ -162,12 +194,9 @@ namespace Invent.Web.Controllers
                 await _roleManager.CreateAsync(new IdentityRole(role));
             }
 
-            var user = await _userManager.FindByEmailAsync(email);           
+            var user = await _userManager.FindByEmailAsync(email);
 
-            if (!await _userManager.IsInRoleAsync(user, "Admin"))
-            {
-                await _userManager.AddToRoleAsync(user, role);
-            }
+            await _userManager.AddToRoleAsync(user, role);
         }
 
         public async Task RemoveFromRole(string role, string email)
@@ -203,7 +232,20 @@ namespace Invent.Web.Controllers
                 ImageUrl = inventory.ImageUrl
             };
 
-            ViewData["UsersId"] = new SelectList(_user_context.Users, "Id", "UserName");
+            var availableUsers = _user_context.Users.ToList();
+
+            //Each manager can have only one inventory. The admin can have as many as he wants.
+            foreach (var manager in this.inventoryRepository.GetAll())
+            {
+                foreach (var user in _user_context.Users)
+                {
+                    if (manager.UserName == user.UserName && manager.UserName != "rui.coutinho.rodrigues@gmail.com")
+                    {
+                        availableUsers.Remove(user);
+                    }
+                }
+            }
+            ViewData["UsersId"] = new SelectList(availableUsers, "Id", "UserName");
 
             return View(thisInventory);
         }
@@ -248,13 +290,15 @@ namespace Invent.Web.Controllers
                 {
                     var oldUser = _user_context.Users.FirstOrDefault(u => u.UserName == inventoryViewModel.UserName);
 
-                    await RemoveFromRole("Manager", oldUser.Email);
+                    if (!await _userManager.IsInRoleAsync(oldUser, "Admin"))
+                    {
+                        await RemoveFromRole("Manager", oldUser.Email);
 
-                    await _emailSender.SendEmailAsync(oldUser.Email, "Inventory Manager",
-                       $"It's time to say goodbye. :(<br/><br/>" +
-                       $"You are no longer the manager of the {inventoryViewModel.Name} inventory. We were very fortunate to have you in our team.<br/><br/>" +
-                       "Best regards, AMS");
-
+                        await _emailSender.SendEmailAsync(oldUser.Email, "Inventory Manager",
+                           $"It's time to say goodbye. :(<br/><br/>" +
+                           $"You are no longer the manager of the {inventoryViewModel.Name} inventory. We were very fortunate to have you in our team.<br/><br/>" +
+                           "Best regards, AMS");
+                    }
 
                     var updatedInventory = new Inventory()
                     {
@@ -269,14 +313,16 @@ namespace Invent.Web.Controllers
                     {
                         await this.inventoryRepository.UpdateAsync(updatedInventory);
 
-                        await AddToRole("Manager", thisUser.Email);
+                        if (!await _userManager.IsInRoleAsync(thisUser, "Admin"))
+                        {
+                            await AddToRole("Manager", thisUser.Email);
 
-                        await _emailSender.SendEmailAsync(thisUser.Email, "Inventory Manager",
-                        $"Welcome to our team.<br/><br/>" +
-                        $"You are now the proud manager of the {inventoryViewModel.Name} inventory. We expect great things from you! :)<br/><br/>" +
-                        $"Please remember: \"With great power comes great responsibility\" (spiderman)<br/><br/>" +
-                        "Best regards, AMS");
-
+                            await _emailSender.SendEmailAsync(thisUser.Email, "Inventory Manager",
+                            $"Welcome to our team.<br/><br/>" +
+                            $"You are now the proud manager of the {inventoryViewModel.Name} inventory. We expect great things from you! :)<br/><br/>" +
+                            $"Please remember: \"With great power comes great responsibility\" (spiderman)<br/><br/>" +
+                            "Best regards, AMS");
+                        }
 
                     }
                     catch (DbUpdateConcurrencyException)
@@ -323,7 +369,20 @@ namespace Invent.Web.Controllers
                 }
             }
 
-            ViewData["UsersId"] = new SelectList(_user_context.Users, "Id", "UserName");
+            var availableUsers = _user_context.Users.ToList();
+
+            //Each manager can have only one inventory. The admin can have as many as he wants.
+            foreach (var manager in this.inventoryRepository.GetAll())
+            {
+                foreach (var user in _user_context.Users)
+                {
+                    if (manager.UserName == user.UserName && user.UserName != "rui.coutinho.rodrigues@gmail.com")
+                    {
+                        availableUsers.Remove(user);
+                    }
+                }
+            }
+            ViewData["UsersId"] = new SelectList(availableUsers, "Id", "UserName");
 
             return View(inventoryViewModel);
         }
@@ -353,8 +412,28 @@ namespace Invent.Web.Controllers
         {
             var inventory = await this.inventoryRepository.GetByIdAsync(id.Value);
 
-            await this.inventoryRepository.DeleteAsync(inventory);
-           
+            if (this.productRepository.GetAll().Any(p => p.InventoryId == id))
+            {
+                inventory.NotAvailable = true;
+                await this.inventoryRepository.UpdateAsync(inventory);
+            }
+            else
+            {
+                await this.inventoryRepository.DeleteAsync(inventory);
+            }
+
+            var oldUser = _user_context.Users.FirstOrDefault(u => u.UserName == inventory.UserName);
+
+            if (!await _userManager.IsInRoleAsync(oldUser, "Admin"))
+            {
+                await RemoveFromRole("Manager", oldUser.Email);
+
+                await _emailSender.SendEmailAsync(oldUser.Email, "Inventory Manager",
+                   $"It's time to say goodbye. :(<br/><br/>" +
+                   $"You are no longer the manager of the {inventory.Name} inventory. We were very fortunate to have you in our team.<br/><br/>" +
+                   "Best regards, AMS");
+            }
+
             return RedirectToAction(nameof(Index));
         }
     }

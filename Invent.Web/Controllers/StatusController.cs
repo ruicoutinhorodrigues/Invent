@@ -37,7 +37,7 @@ namespace Invent.Web.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name")] Status status, string inventoryId)
+        public async Task<IActionResult> Create([Bind("Id,Name")] Status status, string inventoryId, string returnUrl)
         {
             if (await this.statusRepository.ExistsNameAsync(status.Name))
             {
@@ -57,6 +57,14 @@ namespace Invent.Web.Controllers
                 {
                     return RedirectToAction(nameof(Index), "Choices");
                 }
+
+                if (returnUrl.Split("/")[2] == "Edit")
+                {
+                    var id = returnUrl.Split("/")[3];
+
+                    return RedirectToAction(nameof(Edit), "Products", new { id });
+                }
+
                 return RedirectToAction(nameof(Create), "Products", new { inventoryId });
             }
             return View(status);

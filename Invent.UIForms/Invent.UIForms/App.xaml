@@ -10,7 +10,7 @@
             <infra:InstanceLocator x:Key="Locator"/>
 
             <!--Parameters-->
-            <x:String x:Key="UrlAPI">https://localhost:44323</x:String>
+            <x:String x:Key="UrlAPI">https://inventory2019.ddns.net</x:String>
 
             <!--Cores-->
             <Color x:Key="HeaderTextColor">#585858</Color>
