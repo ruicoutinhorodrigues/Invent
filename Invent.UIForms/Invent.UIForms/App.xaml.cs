@@ -1,5 +1,9 @@
-﻿using Invent.UIForms.ViewModels;
+﻿using Invent.Common.Helpers;
+using Invent.Common.Models;
+using Invent.UIForms.ViewModels;
 using Invent.UIForms.Views;
+using Newtonsoft.Json;
+using System;
 using Xamarin.Forms;
 
 namespace Invent.UIForms
@@ -8,9 +12,26 @@ namespace Invent.UIForms
     {
         public static NavigationPage Navigator { get; internal set; }
 
+        public static MasterPage Master { get; internal set; }
+
         public App()
         {
             InitializeComponent();
+
+            if (Settings.IsRemember)
+            {
+                var token = JsonConvert.DeserializeObject<TokenResponse>(Settings.Token);
+                if (token.Expiration > DateTime.Now)
+                {
+                    var mainViewModel = MainViewModel.GetInstance();
+                    mainViewModel.Token = token;
+                    mainViewModel.UserEmail = Settings.UserEmail;
+                    mainViewModel.UserPassword = Settings.UserPassword;
+                    mainViewModel.Products = new ProductsViewModel();
+                    this.MainPage = new MasterPage();
+                    return;
+                }
+            }
 
             MainViewModel.GetInstance().Login = new LoginViewModel();
 

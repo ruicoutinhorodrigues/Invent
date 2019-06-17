@@ -1,7 +1,11 @@
 ﻿using GalaSoft.MvvmLight.Command;
+using Invent.Common.Helpers;
 using Invent.Common.Models;
+using Invent.Common.Models.Local;
 using Invent.Common.Services;
 using Invent.UIForms.Views;
+using Newtonsoft.Json;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Windows.Input;
 using Xamarin.Forms;
@@ -10,13 +14,17 @@ namespace Invent.UIForms.ViewModels
 {
     public class LoginViewModel : BaseViewModel
     {
-        private ApiService apiService;
+        private readonly ApiService apiService;
 
-        private NetService netService;
+        private readonly NetService netService;
+
+        private readonly DbService dbService;
 
         private bool isRunning;
 
         private bool isEnabled;
+
+        public bool IsRemember { get; set; }
 
         public bool IsRunning
         {
@@ -44,11 +52,13 @@ namespace Invent.UIForms.ViewModels
 
         public LoginViewModel()
         {
-            this.Email = "rui.coutinho.rodrigues@gmail.com";
+            this.Email = "snob09.dev@gmail.com";
             this.Password = "Lagarto#75";
             this.apiService = new ApiService();
             this.netService = new NetService();
+            this.dbService = new DbService();
             this.isEnabled = true;
+            this.IsRemember = true;
         }
 
         private async void Login()
@@ -84,49 +94,75 @@ namespace Invent.UIForms.ViewModels
 
             var connection = await this.netService.CheckConnection();
 
+            TokenResponse token = new TokenResponse();
+
             if (!connection.IsSuccess)
             {
                 this.IsRunning = false;
                 this.IsEnabled = true;
-                await Application.Current.MainPage.DisplayAlert(
-                    "Error",
-                    connection.Message,
-                    "Accept");
-                return;
+                //await Application.Current.MainPage.DisplayAlert(
+                //    "Error",
+                //    connection.Message,
+                //    "Accept");
+
+                foreach (var user in (List<LocalUser>)this.dbService.GetDB<LocalUser>().Result)
+                {
+                    if (user.Email == this.Email && user.Password == this.Password) continue;
+                }
+
+                //return;
             }
-
-            var url = Application.Current.Resources["UrlAPI"].ToString();
-
-            var response = await this.apiService.GetTokenAsync(
-                url,
-                "/AccountToken",
-                "/CreateToken",
-                request);
-
-            this.isRunning = false;
-            this.IsEnabled = true;
-
-            if (!response.IsSuccess)
+            else
             {
-                await Application.Current.MainPage.DisplayAlert(
-                    "Error",
-                    "Email or password incorrect",
-                    "Accept");
+                var url = Application.Current.Resources["UrlAPI"].ToString();
 
-                return;
+                var response = await this.apiService.GetTokenAsync(
+                    url,
+                    "/AccountToken",
+                    "/CreateToken",
+                    request);
+
+                this.isRunning = false;
+                this.IsEnabled = true;
+
+                if (!response.IsSuccess)
+                {
+                    await Application.Current.MainPage.DisplayAlert(
+                        "Error",
+                        "Email or password incorrect",
+                        "Accept");
+
+                    return;
+                }
+
+                token = (TokenResponse)response.Result;
+
+                //Save user in DB
+
+                this.dbService.StoreDBItem<LocalUser>(new LocalUser() { Email = this.Email, Password = this.Password });
             }
-
-            var token = (TokenResponse)response.Result;
+        
 
             var mainViewModel = MainViewModel.GetInstance();
 
+            mainViewModel.UserEmail = this.Email;
+
+            mainViewModel.UserPassword = this.Password;
+
             mainViewModel.Token = token;
 
-            mainViewModel.Products = new ProductsViewModel(this.Email);
+            mainViewModel.Products = new ProductsViewModel();
+
+            Settings.IsRemember = this.IsRemember;
+            Settings.UserEmail = this.Email;
+            Settings.UserPassword = this.Password;
+            Settings.Token = JsonConvert.SerializeObject(token);
+
+
+
+           
 
             Application.Current.MainPage = new MasterPage();
-
-            //await Application.Current.MainPage.Navigation.PushAsync(new ProductsPage());
         }
     }
 }

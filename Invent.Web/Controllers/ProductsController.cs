@@ -160,11 +160,13 @@ namespace Invent.Web.Controllers
 
                 product.ImageUrl = path;
                 product.EntryDate = DateTime.Now;
-                product.LastChangeDate = DateTime.Now;             
+                product.LastChangeDate = DateTime.Now;
+
+                var teste1 = product.ReferenceCode.Substring(0, 16);
 
                 var last = await this.productRepository.GetAll()
                     .LastOrDefaultAsync(p =>            
-                    p.ReferenceCode.Substring(0, 14) == product.ReferenceCode.Substring(0, 14) 
+                    p.ReferenceCode.Substring(0, 16) == product.ReferenceCode.Substring(0, 16) 
 
                 );
 
@@ -174,7 +176,7 @@ namespace Invent.Web.Controllers
                 }
                 else
                 {
-                    product.ReferenceCode = product.ReferenceCode + (Convert.ToInt32(last.ReferenceCode.Substring(14)) + 1);
+                    product.ReferenceCode += (Convert.ToInt32(last.ReferenceCode.Substring(16)) + 1);
                 }
 
                 await this.productRepository.CreateAsync(product);

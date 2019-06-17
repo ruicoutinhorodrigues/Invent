@@ -30,5 +30,9 @@ namespace Invent.Web.Models
         public string Size { get; set; }
 
         public string Color { get; set; }
+
+        public DateTime EntryDate { get; set; }
+
+        public DateTime LastChangeDate { get; set; }
     }
 }

@@ -14,6 +14,8 @@ namespace Invent.Common.Models
         [JsonProperty("imageFullPath")]
         public string ImageFullPath { get; set; }
 
+        public byte[] ImageArray { get; set; }
+
         [JsonProperty("inventoryName")]
         public string InventoryName { get; set; }
 
@@ -41,9 +43,11 @@ namespace Invent.Common.Models
         [JsonProperty("color")]
         public string Color { get; set; }
 
-        //public override string ToString()
-        //{
-        //    return $"{this.ReferenceCode} {this.Value}";
-        //}
+        [JsonProperty("entryDate")]
+        public DateTime EntryDate { get; set; }
+
+        [JsonProperty("lastChangeDate")]
+        public DateTime LastChangeDate { get; set; }
+
     }
 }

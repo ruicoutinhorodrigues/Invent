@@ -1,0 +1,257 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="Invent.UIForms.Views.EditProductPage"
+             BindingContext="{Binding Main, Source={StaticResource Locator}}"
+             Title="Edit Product"
+             BackgroundColor="{DynamicResource backgroundColor}">
+    <ContentPage.Content>
+        <ScrollView
+        	BindingContext="{Binding EditProduct}">
+            <StackLayout
+            	Padding="10">
+                <Image
+                	HeightRequest="150"
+                	Source="{Binding Product.ImageFullPath}">
+                </Image>
+                <!--<Label
+                	FontSize="Micro"
+                	HorizontalOptions="Center"
+                	Text="Tap the image to change it...">
+                </Label>-->
+                <Grid BackgroundColor="#0092CB" Padding="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <Label
+                    	Grid.Column="0"
+                    	Grid.Row="0"
+                        TextColor="White"
+                    	Text="Reference"
+                        Margin="10,0,0,5">
+                    </Label>
+                    <Label
+                    	Grid.Column="1"
+                    	Grid.Row="0"
+                        Grid.RowSpan="2"
+                        TextColor="White"
+                    	Text="{Binding Product.ReferenceCode}"
+                    	VerticalOptions="Center">
+                    </Label>
+                    <Label
+                    	Grid.Column="0"
+                    	Grid.Row="1"
+                        TextColor="White"
+                    	Text="Inventory"
+                    	VerticalOptions="Center"
+                        Margin="10,0,0,5">
+                    </Label>
+                    <Label
+                    	Grid.Column="1"
+                    	Grid.Row="1"
+                        Grid.RowSpan="2"
+                        TextColor="White"
+                    	Text="{Binding Product.InventoryName}"
+                        VerticalOptions="Center">
+                    </Label>
+                    <Label
+                    	Grid.Column="0"
+                    	Grid.Row="2"
+                        TextColor="White"
+                    	Text="Category"
+                    	VerticalOptions="Center"
+                        Margin="10,0,0,5">
+                    </Label>
+                    <Label
+                    	Grid.Column="1"
+                    	Grid.Row="2"
+                        TextColor="White"
+                    	Text="{Binding Product.Category}"
+                        VerticalOptions="Center">
+                    </Label>
+                    <Label
+                    	Grid.Column="0"
+                    	Grid.Row="3"
+                        TextColor="White"
+                    	Text="Model"
+                    	VerticalOptions="Center"
+                        Margin="10,0,0,5">
+                    </Label>
+                    <Label
+                    	Grid.Column="1"
+                    	Grid.Row="3"
+                        TextColor="White"
+                    	Text="{Binding Product.ProductModel}"
+                        VerticalOptions="Center">
+                    </Label>
+                    <Label
+                    	Grid.Column="0"
+                    	Grid.Row="4"
+                        TextColor="White"
+                    	Text="Supplier"
+                    	VerticalOptions="Center"
+                        Margin="10,0,0,5">
+                    </Label>
+                    <Label
+                    	Grid.Column="1"
+                    	Grid.Row="4"
+                        TextColor="White"
+                    	Text="{Binding Product.Supplier}"
+                        VerticalOptions="Center">
+                    </Label>
+                    <Label
+                    	Grid.Column="0"
+                    	Grid.Row="5"
+                        TextColor="White"
+                    	Text="Size"
+                    	VerticalOptions="Center"
+                        Margin="10,0,0,5">
+                    </Label>
+                    <Label
+                    	Grid.Column="1"
+                    	Grid.Row="5"
+                        TextColor="White"
+                    	Text="{Binding Product.Size}"
+                        VerticalOptions="Center">
+                    </Label>
+                    <Label
+                    	Grid.Column="0"
+                    	Grid.Row="6"
+                        TextColor="White"
+                    	Text="Color"
+                    	VerticalOptions="Center"
+                        Margin="10,0,0,5">
+                    </Label>
+                    <Label
+                    	Grid.Column="1"
+                    	Grid.Row="6"
+                        TextColor="White"
+                    	Text="{Binding Product.Color}"
+                        VerticalOptions="Center">
+                    </Label>
+                    <Label
+                    	Grid.Column="0"
+                    	Grid.Row="7"
+                        TextColor="White"
+                    	Text="Value"
+                    	VerticalOptions="Center"
+                        Margin="10,0,0,5">
+                    </Label>
+                    <Label
+                    	Grid.Column="1"
+                    	Grid.Row="7"
+                        TextColor="White"
+                    	Text="{Binding Product.Value}"
+                    	VerticalOptions="Center">
+                    </Label>
+                    <Entry
+                    	Grid.Column="2"
+                    	Grid.Row="7"
+                        TextColor="White"
+                        FontSize="12"
+                        VerticalOptions="Center"
+                    	Keyboard="Numeric"
+                    	Placeholder="New value..."
+                    	Text="{Binding NewValue}">
+                    </Entry>
+                    <Label
+                    	Grid.Column="0"
+                    	Grid.Row="8"
+                        TextColor="White"
+                    	Text="Location"
+                    	VerticalOptions="Center"
+                        Margin="10,0,0,5">
+                    </Label>
+                    <Label
+                    	Grid.Column="1"
+                    	Grid.Row="8"
+                        TextColor="White"
+                    	Text="{Binding Product.Location}"
+                    	VerticalOptions="Center">
+                    </Label>
+                    <Picker
+                        Grid.Column="2"
+                    	Grid.Row="8"
+                        TitleColor="White"
+                        FontSize="12"
+                        VerticalOptions="Center"
+                        Title="Select location"
+                        ItemsSource="{Binding LocationList}"
+                        ItemDisplayBinding="{Binding Name}"
+                        SelectedItem="{Binding SelectedLocation}">
+                    </Picker>
+                    <Label
+                    	Grid.Column="0"
+                    	Grid.Row="9"
+                        TextColor="White"
+                    	Text="Status"
+                    	VerticalOptions="Center"
+                        Margin="10,0,0,5">
+                    </Label>
+                    <Label
+                    	Grid.Column="1"
+                    	Grid.Row="9"
+                        TextColor="White"
+                    	Text="{Binding Product.Status}"
+                    	VerticalOptions="Center">
+                    </Label>
+                    <Picker
+                        Grid.Column="2"
+                    	Grid.Row="9"
+                        TitleColor="White"
+                        FontSize="12"
+                        VerticalOptions="Center"
+                        Title="Select status"
+                        ItemsSource="{Binding StatusList}"
+                        ItemDisplayBinding="{Binding Name}"
+                        SelectedItem="{Binding SelectedStatus}">
+                    </Picker>
+                </Grid>
+                <ActivityIndicator
+                	IsRunning="{Binding IsRunning}"
+                	VerticalOptions="CenterAndExpand">
+                </ActivityIndicator>
+                <StackLayout
+                	Orientation="Horizontal">
+                    <Button
+                    	BackgroundColor="Navy"
+                    	BorderRadius="23"
+                    	Command="{Binding SaveCommand}"
+                    	HeightRequest="46"
+                    	HorizontalOptions="FillAndExpand"
+                    	IsEnabled="{Binding IsEnabled}"
+                    	Text="Update"
+                    	TextColor="White">
+                    </Button>
+                    <!--<Button
+                    	BackgroundColor="Red"
+                    	BorderRadius="23"
+                    	Command="{Binding DeleteCommand}"
+                    	HeightRequest="46"
+                    	HorizontalOptions="FillAndExpand"
+                    	IsEnabled="{Binding IsEnabled}"
+                    	Text="Delete"
+                    	TextColor="White">
+                    </Button>-->
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

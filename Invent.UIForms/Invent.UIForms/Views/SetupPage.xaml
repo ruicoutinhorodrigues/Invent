@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="Invent.UIForms.Views.SetupPage"
+             Title="Setup"
+             BackgroundColor="{DynamicResource backgroundColor}">
+    <ContentPage.Content>
+        <StackLayout
+            Padding="20"
+            VerticalOptions="Center">
+            <Label
+                	FontSize="Medium"
+                	Text="Background">
+            </Label>
+            <Button Text="Lighter" Clicked="Button_Lighter"></Button>
+            <Button Text="Darker" Clicked="Button_Darker"></Button>
+            <Button Text="Darkest" Clicked="Button_Darkest"></Button>
+            <Button Text="Are you cool?" Clicked="Button_Cool"></Button>
+            <Button Text="Are you a lady?" Clicked="Button_Lady"></Button>
+            <Button Text="Are you a crazy?" Clicked="Button_Crazy"></Button>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

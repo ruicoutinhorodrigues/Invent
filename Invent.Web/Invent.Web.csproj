@@ -21,4 +21,9 @@
     <Folder Include="wwwroot\images\Products\" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <ProjectReference Include="..\Invent.Common\Invent.Common.csproj" />
+  </ItemGroup>
+
 </Project>

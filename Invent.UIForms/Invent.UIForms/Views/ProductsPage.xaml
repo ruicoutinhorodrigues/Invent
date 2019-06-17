@@ -3,11 +3,71 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Invent.UIForms.Views.ProductsPage"
              BindingContext="{Binding Main, Source={StaticResource Locator}}"
-             Title="Products">
+             Title="Products"
+             BackgroundColor="{DynamicResource backgroundColor}">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Icon="ic_action_add_circle" Command="{Binding AddProductCommand}" />
+    </ContentPage.ToolbarItems>
     <ContentPage.Content>
         <StackLayout
             BindingContext="{Binding Products}"
             Padding="5">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="3*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Image
+                    Grid.Column="0"
+                	HeightRequest="100"
+                	Source="{Binding InventoryImage}">
+                </Image>
+                <Label
+                    Grid.Column="1"
+                	FontSize="Medium"
+                	HorizontalOptions="Center"
+                    VerticalOptions="Center"
+                	Text="{Binding CurrentInventory}">
+                </Label>
+                <Label
+                    	Grid.Column="1"
+                    	Grid.Row="1"
+                    	Text="Off line"
+                    	VerticalOptions="Center"
+                        TextColor="White"
+                        BackgroundColor="Red"
+                        HorizontalTextAlignment="Center"
+                        IsVisible="{Binding IsVisible}">
+                </Label>
+                <Label
+                    Grid.Column="0"
+                    Grid.Row="2"
+                    Text="Number of items:"
+                    FontSize="Medium"
+                    FontAttributes="Bold"
+                    TextColor="White"
+                    BackgroundColor="#0092CB"
+                    HorizontalTextAlignment="Center"
+                    Margin="0, 10, 0, 5">
+                </Label>
+                <Label
+                    Grid.Column="1"
+                    Grid.Row="2"
+                    Text="{Binding NumberOfItems}"
+                    FontSize="Medium"
+                    FontAttributes="Bold"
+                    TextColor="White"
+                    BackgroundColor="#0092CB"
+                    HorizontalTextAlignment="Center"
+                    Margin="0, 10, 0, 5">
+                </Label>
+            </Grid>
+           
             <ListView
                 HasUnevenRows="True"
                 IsRefreshing="{Binding IsRefreshing}"
@@ -16,9 +76,13 @@
                     <DataTemplate>
                         <ViewCell>
                             <Grid>
+                                <Grid.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding SelectProductCommand}"/>
+                                </Grid.GestureRecognizers>
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="*"/>
+                                    <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
                                 <Grid.ColumnDefinitions>
                                     <ColumnDefinition Width="*"/>
@@ -45,7 +109,7 @@
                                         Text="{Binding ReferenceCode}"
                                         TextColor="White"
                                         BackgroundColor="#A5A6A9"
-                                        FontSize="11"
+                                        FontSize="10"
                                         HorizontalTextAlignment="Center">
                                     </Label>
                                     <Label
@@ -65,7 +129,7 @@
                                     Grid.Row="1"
                                     Grid.Column="1"
                                     Source="{Binding ImageFullPath}"
-                                    WidthRequest="100">
+                                    WidthRequest="80">
                                 </Image>
                                 <StackLayout
                                     Grid.Row="1"
@@ -86,13 +150,32 @@
                                         HorizontalTextAlignment="Center">
                                     </Label>
                                     <Label
-                                        Text="{Binding Supplier, StringFormat='     Supplier: {0:N}'}"
+                                        Text="{Binding Supplier, StringFormat='Supplier: {0:N}'}"
                                        TextColor="White"
                                         BackgroundColor="#00B6E5"
                                         FontSize="10"
                                         HorizontalTextAlignment="Center">
                                     </Label>
                                 </StackLayout>
+                                <Label
+                                     Grid.Row="2"
+                                     Grid.Column="0"
+                                    
+                                     Text="{Binding Color, StringFormat='Color: {0:N}'}"
+                                     TextColor="White"
+                                     BackgroundColor="Green"
+                                     FontSize="10"
+                                     HorizontalTextAlignment="Center">
+                                </Label>
+                                <Label
+                                    Grid.Row="2"
+                                     Grid.Column="2"
+                                     Text="{Binding Size, StringFormat='Size: {0:N}'}"
+                                     TextColor="White"
+                                     BackgroundColor="Red"
+                                     FontSize="10"
+                                     HorizontalTextAlignment="Center">
+                                </Label>
                             </Grid>
                         </ViewCell>
                     </DataTemplate>

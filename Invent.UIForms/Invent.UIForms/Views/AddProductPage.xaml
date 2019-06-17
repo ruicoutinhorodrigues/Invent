@@ -1,0 +1,201 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             x:Class="Invent.UIForms.Views.AddProductPage"
+             BindingContext="{Binding Main, Source={StaticResource Locator}}"
+             Title="Add Product"
+             BackgroundColor="{DynamicResource backgroundColor}">
+    <ContentPage.Content>
+        <ScrollView
+        	BindingContext="{Binding AddProduct}">
+            <StackLayout
+            	Padding="10">
+                <Image
+                	Source="{Binding ImageSource}">
+                    <Image.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding ChangeImageCommand}"/>
+                    </Image.GestureRecognizers>
+
+                </Image>
+                <Label
+                	FontSize="Micro"
+                	HorizontalOptions="Center"
+                	Text="Tap the image to change it...">
+                </Label>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <!--<Label
+                    	Grid.Column="0"
+                    	Grid.Row="0"
+                    	Text="Reference"
+                    	VerticalOptions="Center">
+                    </Label>
+                    <Entry
+                    	Grid.Column="1"
+                    	Grid.Row="0"
+                    	Placeholder="Product reference..."
+                    	Text="{Binding ReferenceCode}">
+                    </Entry>-->
+                    <Label
+                    	Grid.Column="0"
+                    	Grid.Row="1"
+                    	Text="Value"
+                    	VerticalOptions="Center">
+                    </Label>
+                    <Entry
+                    	Grid.Column="1"
+                    	Grid.Row="1"
+                    	Keyboard="Numeric"
+                    	Placeholder="Product value..."
+                    	Text="{Binding Value}">
+                    </Entry>
+
+                    <Label
+                    	Grid.Column="0"
+                    	Grid.Row="2"
+                    	Text="Inventory"
+                    	VerticalOptions="Center"
+                        IsVisible="{Binding IsVisible}">
+                    </Label>
+                    <Picker
+                        Grid.Column="1"
+                    	Grid.Row="2"
+                        Title="Select inventory"
+                        ItemsSource="{Binding InventoryList}"
+                        ItemDisplayBinding="{Binding Name}"
+                        SelectedItem="{Binding SelectedInventory}"
+                        IsVisible="{Binding IsVisible}">
+                    </Picker>
+                    <Label
+                    	Grid.Column="0"
+                    	Grid.Row="3"
+                    	Text="Location"
+                    	VerticalOptions="Center">
+                    </Label>
+                    <Picker
+                        Grid.Column="1"
+                    	Grid.Row="3"
+                        Title="Select location"
+                        ItemsSource="{Binding LocationList}"
+                        ItemDisplayBinding="{Binding Name}"
+                        SelectedItem="{Binding SelectedLocation}">
+                    </Picker>
+                    <Label
+                    	Grid.Column="0"
+                    	Grid.Row="4"
+                    	Text="Status"
+                    	VerticalOptions="Center">
+                    </Label>
+                    <Picker
+                        Grid.Column="1"
+                    	Grid.Row="4"
+                        Title="Select status"
+                        ItemsSource="{Binding StatusList}"
+                        ItemDisplayBinding="{Binding Name}"
+                        SelectedItem="{Binding SelectedStatus}">
+                    </Picker>
+                    <Label
+                    	Grid.Column="0"
+                    	Grid.Row="5"
+                    	Text="Category"
+                    	VerticalOptions="Center">
+                    </Label>
+                    <Picker
+                        Grid.Column="1"
+                    	Grid.Row="5"
+                        Title="Select category"
+                        ItemsSource="{Binding CategoryList}"
+                        ItemDisplayBinding="{Binding Name}"
+                        SelectedItem="{Binding SelectedCategory}">
+                    </Picker>
+                    <Label
+                    	Grid.Column="0"
+                    	Grid.Row="6"
+                    	Text="Model"
+                    	VerticalOptions="Center">
+                    </Label>
+                    <Picker
+                        Grid.Column="1"
+                    	Grid.Row="6"
+                        Title="Select model"
+                        ItemsSource="{Binding ProductModelList}"
+                        ItemDisplayBinding="{Binding Name}"
+                        SelectedItem="{Binding SelectedProductModel}">
+                    </Picker>
+                    <Label
+                    	Grid.Column="0"
+                    	Grid.Row="7"
+                    	Text="Supplier"
+                    	VerticalOptions="Center">
+                    </Label>
+                    <Picker
+                        Grid.Column="1"
+                    	Grid.Row="7"
+                        Title="Select supplier"
+                        ItemsSource="{Binding SupplierList}"
+                        ItemDisplayBinding="{Binding Name}"
+                        SelectedItem="{Binding SelectedSupplier}">
+                    </Picker>
+                    <Label
+                    	Grid.Column="0"
+                    	Grid.Row="8"
+                    	Text="Color"
+                    	VerticalOptions="Center">
+                    </Label>
+                    <Picker
+                        Grid.Column="1"
+                    	Grid.Row="8"
+                        Title="Select color"
+                        ItemsSource="{Binding ColorList}"
+                        ItemDisplayBinding="{Binding Name}"
+                        SelectedItem="{Binding SelectedColor}">
+                    </Picker>
+                    <Label
+                    	Grid.Column="0"
+                    	Grid.Row="9"
+                    	Text="Size"
+                    	VerticalOptions="Center">
+                    </Label>
+                    <Picker
+                        Grid.Column="1"
+                    	Grid.Row="9"
+                        Title="Select size"
+                        ItemsSource="{Binding SizeList}"
+                        ItemDisplayBinding="{Binding Name}"
+                        SelectedItem="{Binding SelectedSize}">
+                    </Picker>
+                </Grid>
+                <ActivityIndicator
+                	IsRunning="{Binding IsRunning}"
+                	VerticalOptions="CenterAndExpand">
+                </ActivityIndicator>
+                <Button
+                	BackgroundColor="Navy"
+                	BorderRadius="23"
+                	Command="{Binding SaveCommand}"
+                	HeightRequest="46"
+                	IsEnabled="{Binding IsEnabled}"
+                	Text="Save"
+                	TextColor="White">
+                </Button>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

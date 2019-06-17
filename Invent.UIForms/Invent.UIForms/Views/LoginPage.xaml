@@ -3,25 +3,45 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Invent.UIForms.Views.LoginPage"
              BindingContext="{Binding Main, Source={StaticResource Locator}}"
-             Title="Login">
+             Title="Login"
+             BackgroundColor="{DynamicResource backgroundColor}">
     <ContentPage.Content>
-        <ScrollView BindingContext="{Binding Login}">  
-             <StackLayout Padding="8">
-                 
-                <Label Text="Email"/>
+        <ScrollView BindingContext="{Binding Login}">
+            <StackLayout Padding="8">
+                <Image
+                HeightRequest="150"
+                Source="logo">
+                </Image>
+                <Label Text="Email" TextColor="{DynamicResource textcolor}"/>
                 <Entry Keyboard="Email" Placeholder="Enter your email..."
-                        Text="{Binding Email}"/>
-
+                        Text="{Binding Email}" />
                 <Label Text="Password"/>
                 <Entry IsPassword="True" Placeholder="Enter your password..."
                         Text="{Binding Password}"/>
+                <StackLayout
+                    HorizontalOptions="Center"
+                    Orientation="Horizontal">
+                    <Label
+                        Text="Remember me"
+                        VerticalOptions="Center">
+                    </Label>
+                    <Switch
+                         IsToggled="{Binding IsRemember}">
+                    </Switch>
+                </StackLayout>
                 <ActivityIndicator
-                    IsRunning="{Binding IsRunning}">
+                    IsRunning="{Binding IsRunning}"
+                    VerticalOptions="CenterAndExpand">
                 </ActivityIndicator>
-                <Button Command="{Binding LoginCommand}" IsEnabled="{Binding IsEnabled}" Text="Login"/>
-                 
+                <Button BackgroundColor="#0092CB"
+                    BorderRadius="23"
+                    HeightRequest="46"
+                    TextColor="White"
+                    Command="{Binding LoginCommand}"
+                    IsEnabled="{Binding IsEnabled}"
+                    Text="Login">
+                </Button>
             </StackLayout>
         </ScrollView>
-       
     </ContentPage.Content>
 </ContentPage>
